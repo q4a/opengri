@@ -1,0 +1,9 @@
+[gd_scene format=2]
+
+[node name="OpenGRI" type="Button"]
+margin_right = 150.0
+margin_bottom = 50.0
+text = "Click me!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
