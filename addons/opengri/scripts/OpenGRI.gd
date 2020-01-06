@@ -4,7 +4,7 @@ extends EditorPlugin
 var dock
 
 func _enter_tree():
-	dock = preload("res://addons/opengri/dock.tscn").instance()
+	dock = preload("res://addons/opengri/scenes/MainDock.tscn").instance()
 	add_control_to_dock(DOCK_SLOT_RIGHT_UL, dock)
 
 func _exit_tree():
