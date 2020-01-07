@@ -27,29 +27,6 @@ onready var MapBTN = $FileEditorContainer/SplitContainer/EditorContainer/HBoxCon
 
 onready var EditorContainer = $FileEditorContainer/SplitContainer
 
-var DIRECTORY : String = "res://"
-var EXCEPTIONS : String = "addons"
-var EXTENSIONS : PoolStringArray = [
-"*.txt ; Plain Text File", 
-"*.rtf ; Rich Text Format File", 
-"*.log ; Log File", 
-"*.md ; MD File",
-"*.doc ; WordPad Document",
-"*.doc ; Microsoft Word Document",
-"*.docm ; Word Open XML Macro-Enabled Document",
-"*.docx ; Microsoft Word Open XML Document",
-"*.bbs ; Bulletin Board System Text",
-"*.dat ; Data File",
-"*.xml ; XML File",
-"*.sql ; SQL database file",
-"*.json ; JavaScript Object Notation File",
-"*.html ; HyperText Markup Language",
-"*.csv ; Comma-separated values",
-"*.cfg ; Configuration File",
-"*.ini ; Initialization File (same as .cfg Configuration File)",
-"*.csv ; Comma-separated values File",
-]
-
 var directories = []
 var files = []
 var current_file_index = -1
@@ -69,8 +46,6 @@ func _ready():
 #	var opened_files : Array = LastOpenedFiles.load_opened_files()
 #	for open_file in opened_files:
 #		open_file(open_file[1])
-	
-	FileList.set_filters(EXTENSIONS)
 
 func create_shortcuts():
 	var hotkey 
@@ -171,9 +146,9 @@ func create_selected_file():
 
 func open_selected_file():
 	update_list()
-	FileList.mode = FileDialog.MODE_OPEN_ANY
-	FileList.access = FileDialog.ACCESS_FILESYSTEM
-	FileList.set_title("Select game folder or resource file")
+#	FileList.mode = FileDialog.MODE_OPEN_ANY
+#	FileList.access = FileDialog.ACCESS_FILESYSTEM
+#	FileList.set_title("Select game folder or resource file")
 	if FileList.is_connected("file_selected",self,"delete_file"):
 		FileList.disconnect("file_selected",self,"delete_file")
 	if FileList.is_connected("file_selected",self,"create_new_file"):
