@@ -19,6 +19,11 @@ config/name="opengri"
 run/main_scene="res://root.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+IconLoader="*res://addons/opengri/scripts/IconLoader.gd"
+LastOpenedFiles="*res://addons/opengri/scripts/LastOpenedFiles.gd"
+
 [editor_plugins]
 
 enabled=PoolStringArray( "opengri" )
