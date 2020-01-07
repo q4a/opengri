@@ -26,7 +26,7 @@ LastOpenedFiles="*res://addons/opengri/scripts/LastOpenedFiles.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "opengri" )
+enabled=PoolStringArray( "godot-plugin-refresher", "opengri" )
 
 [rendering]
 

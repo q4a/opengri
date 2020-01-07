@@ -66,9 +66,9 @@ func _ready():
 	create_shortcuts()
 	load_icons()
 	
-	var opened_files : Array = LastOpenedFiles.load_opened_files()
-	for open_file in opened_files:
-		open_file(open_file[1])
+#	var opened_files : Array = LastOpenedFiles.load_opened_files()
+#	for open_file in opened_files:
+#		open_file(open_file[1])
 	
 	FileList.set_filters(EXTENSIONS)
 
