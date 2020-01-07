@@ -171,8 +171,9 @@ func create_selected_file():
 
 func open_selected_file():
 	update_list()
-	FileList.mode = FileDialog.MODE_OPEN_FILE
-	FileList.set_title("Select a File you want to edit")
+	FileList.mode = FileDialog.MODE_OPEN_ANY
+	FileList.access = FileDialog.ACCESS_FILESYSTEM
+	FileList.set_title("Select game folder or resource file")
 	if FileList.is_connected("file_selected",self,"delete_file"):
 		FileList.disconnect("file_selected",self,"delete_file")
 	if FileList.is_connected("file_selected",self,"create_new_file"):
