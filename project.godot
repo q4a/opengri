@@ -22,7 +22,6 @@ config/icon="res://icon.png"
 [autoload]
 
 IconLoader="*res://addons/opengri/scripts/IconLoader.gd"
-LastOpenedFiles="*res://addons/opengri/scripts/LastOpenedFiles.gd"
 
 [editor_plugins]
 
