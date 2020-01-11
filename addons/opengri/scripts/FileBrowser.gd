@@ -16,10 +16,15 @@ onready var OpenFileDialog = $OpenFileDialog
 onready var NewFileDialog = $NewFileDialog
 onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
 
+var games_path : Dictionary 
+
 func _ready():
 	clean_editor()
 	update_version()
 	connect_signals()
+	load_config()
+	GameSelector.set_item_metadata(1, "GTA_IV")
+	GameSelector.set_item_metadata(2, "GTA_IV_EFLC")
 
 func clean_editor() -> void :
 	GamePath.clear()
@@ -45,11 +50,46 @@ func _on_GameSelector_item_selected(id):
 	if id == 0: 
 		clean_editor()
 	else:
-		print(GameSelector.get_item_text(id))
+		var game_name = GameSelector.get_item_text(id)
+		var game_id = GameSelector.get_item_metadata(id)
+		print("game_id="+game_id)
+		var game_path
+		if games_path.has(game_name):
+			game_path = games_path[game_name]
+			print("game_path1="+game_path)
+		else:
+			game_path = "f_game_path"
+			save_to_config("games", game_name, game_path)
+			print("game_path2="+game_path)
+		
+		GamePath.set_text(game_path)
+		print(game_name)
 #	if id == 1:
 #		open_filelist()
 #	elif id == 2:
 #		clean_editor()
+
+########## Config file ##########
+
+func load_config():
+	var config = ConfigFile.new()
+	var err = config.load(CONFIG_FILE)
+	if err: # File is missing, create default config
+		config.save(CONFIG_FILE)
+	else:
+		for game_name in config.get_section_keys("games"):
+			var game_path = config.get_value("games", game_name)
+			games_path[game_name] = game_path
+
+func save_to_config(section, key, value):
+	var config = ConfigFile.new()
+	var err = config.load(CONFIG_FILE)
+	if err:
+		print("Error code when loading config file: ", err)
+	else:
+		config.set_value(section, key, value)
+		config.save(CONFIG_FILE)
+
 
 ########## Additional methods ##########
 
