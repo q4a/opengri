@@ -3,6 +3,7 @@ extends Control
 
 # Constants
 const CONFIG_FILE = "user://opengri.cfg"
+const GameClass = preload("res://addons/opengri/classes/GameClass.gd")
 
 onready var GameSelector = $FileBrowserContainer/GameSelectorContainer/GameSelector
 onready var GamePath = $FileBrowserContainer/GameSelectorContainer/GamePath
@@ -19,12 +20,10 @@ onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
 var games_path : Dictionary 
 
 func _ready():
-	clean_editor()
 	update_version()
 	connect_signals()
+	fill_GameSelector()
 	load_config()
-	GameSelector.set_item_metadata(1, "GTA_IV")
-	GameSelector.set_item_metadata(2, "GTA_IV_EFLC")
 
 func clean_editor() -> void :
 	GamePath.clear()
@@ -44,30 +43,41 @@ func connect_signals():
 	OpenFileDialog.connect("file_selected", self, "open_file")
 #	FileList.connect("item_selected", self, "_on_fileitem_pressed") # double click
 
+func fill_GameSelector():
+#	GameSelector.clear()
+	var g = GameClass.new()
+	g.constructor({title = "-- Select game --"})
+	GameSelector.add_item(g.title, 0)
+	
+	add_item_GameSelector(1, {title = "GTA IV", cfg_key = "GTA_IV"})
+	add_item_GameSelector(2, {title = "GTA IV: EFLC", cfg_key = "GTA_IV_EFLC"})
+
+func add_item_GameSelector(id, params = {}):
+	var g = GameClass.new()
+	g.constructor(params)
+	GameSelector.add_item(g.title, id)
+	GameSelector.set_item_metadata(id, g)
+
 ########## Signals ##########
 
 func _on_GameSelector_item_selected(id):
 	if id == 0: 
 		clean_editor()
 	else:
-		var game_name = GameSelector.get_item_text(id)
-		var game_id = GameSelector.get_item_metadata(id)
-		print("game_id="+game_id)
-		var game_path
-		if games_path.has(game_name):
-			game_path = games_path[game_name]
-			print("game_path1="+game_path)
-		else:
-			game_path = "f_game_path"
-			save_to_config("games", game_name, game_path)
-			print("game_path2="+game_path)
-		
-		GamePath.set_text(game_path)
-		print(game_name)
-#	if id == 1:
-#		open_filelist()
-#	elif id == 2:
-#		clean_editor()
+#		var game_name = GameSelector.get_item_text(id)
+		var game_obj = GameSelector.get_item_metadata(id)
+		print("game_key=" + game_obj.cfg_key)
+#		var game_path
+#		if games_path.has(game_name):
+#			game_path = games_path[game_name]
+#			print("game_path1="+game_path)
+#		else:
+#			game_path = "f_game_path"
+#			save_to_config("games", game_name, game_path)
+#			print("game_path2="+game_path)
+#
+		GamePath.set_text(game_obj.cfg_key)
+#		print(game_name)
 
 ########## Config file ##########
 

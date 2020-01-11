@@ -8,7 +8,7 @@ func _enter_tree():
 	doc.hide()
 
 func _exit_tree():
-	doc.clean_editor()
+#	doc.clean_editor()
 	get_editor_interface().get_editor_viewport().remove_child(doc)
 
 func has_main_screen():

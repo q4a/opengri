@@ -31,8 +31,6 @@ margin_bottom = 24.0
 margin_right = 135.0
 margin_bottom = 24.0
 text = "-- Select game --"
-items = [ "-- Select game --", null, false, 0, null, "GTA IV", null, false, 1, null, "GTA IV: EFLC", null, false, 2, null ]
-selected = 0
 
 [node name="GamePath" type="LineEdit" parent="FileBrowserContainer/GameSelectorContainer"]
 margin_left = 139.0
