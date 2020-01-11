@@ -44,10 +44,12 @@ func connect_signals():
 func _on_GameSelector_item_selected(id):
 	if id == 0: 
 		clean_editor()
-	elif id == 1:
-		open_filelist()
-	elif id == 2:
-		clean_editor()
+	else:
+		print(GameSelector.get_item_text(id))
+#	if id == 1:
+#		open_filelist()
+#	elif id == 2:
+#		clean_editor()
 
 ########## Additional methods ##########
 

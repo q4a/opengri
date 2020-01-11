@@ -1,9 +1,0 @@
-[Opened]
-
-sample.md="res://addons/opengri/file.samples/sample.md"
-sample.bbs="res://addons/opengri/file.samples/sample.bbs"
-sample.ini="res://addons/opengri/file.samples/sample.ini"
-sample.cfg="res://addons/opengri/file.samples/sample.cfg"
-sample.csv="res://addons/opengri/file.samples/sample.csv"
-sample.txt="res://addons/opengri/file.samples/sample.txt"
-sample.html="res://addons/opengri/file.samples/sample.html"
