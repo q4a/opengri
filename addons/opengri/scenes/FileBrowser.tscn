@@ -31,6 +31,10 @@ margin_bottom = 24.0
 margin_right = 135.0
 margin_bottom = 24.0
 text = "-- Select game --"
+items = [ "-- Select game --", null, false, 0, null, "GTA IV", null, false, 1, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/opengri/classes/GameClass.gd" ),"title":"GTA IV","cfg_key":"GTA_IV","path":"C:/game/Grand Theft Auto IV/GTAIV")
+, "GTA IV: EFLC", null, false, 2, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/opengri/classes/GameClass.gd" ),"title":"GTA IV: EFLC","cfg_key":"GTA_IV_EFLC","path":"C:/game/Grand Theft Auto IV/EFLC")
+ ]
+selected = 0
 
 [node name="GamePath" type="LineEdit" parent="FileBrowserContainer/GameSelectorContainer"]
 margin_left = 139.0
@@ -89,13 +93,11 @@ margin_right = 1024.0
 margin_bottom = 600.0
 size_flags_vertical = 3
 popup_exclusive = true
-window_title = "Открыть каталог или файл"
+window_title = "Open game path"
 dialog_hide_on_ok = true
-mode = 3
+mode = 2
 access = 2
 filters = PoolStringArray( "* ; Any file or folder" )
-current_dir = "C:/git/opengri"
-current_path = "C:/git/opengri/"
 
 [node name="NewFileDialog" type="AcceptDialog" parent="."]
 margin_left = 348.254
@@ -144,3 +146,4 @@ window_title = "Unsaved changes"
 dialog_text = "There are some unsaved changes.
 Press \"OK\" if you want to close this tab anyway, or \"cancel\" if you want to keep on editing your file."
 [connection signal="item_selected" from="FileBrowserContainer/GameSelectorContainer/GameSelector" to="." method="_on_GameSelector_item_selected"]
+[connection signal="dir_selected" from="OpenFileDialog" to="." method="_on_OpenFileDialog_dir_selected"]
