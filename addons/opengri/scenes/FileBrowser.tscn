@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://addons/opengri/scripts/FileBrowser.gd" type="Script" id=1]
+[ext_resource path="res://addons/opengri/icons/icon_folder.png" type="Texture" id=2]
 
 [node name="FileBrowser" type="Control"]
 anchor_right = 1.0
@@ -36,8 +37,14 @@ items = [ "-- Select game --", null, false, 0, null, "GTA IV", null, false, 1, O
  ]
 selected = 0
 
-[node name="GamePath" type="LineEdit" parent="FileBrowserContainer/GameSelectorContainer"]
+[node name="SelectGamePath" type="Button" parent="FileBrowserContainer/GameSelectorContainer"]
 margin_left = 139.0
+margin_right = 167.0
+margin_bottom = 24.0
+icon = ExtResource( 2 )
+
+[node name="GamePath" type="LineEdit" parent="FileBrowserContainer/GameSelectorContainer"]
+margin_left = 171.0
 margin_right = 982.0
 margin_bottom = 24.0
 mouse_filter = 1
@@ -146,4 +153,5 @@ window_title = "Unsaved changes"
 dialog_text = "There are some unsaved changes.
 Press \"OK\" if you want to close this tab anyway, or \"cancel\" if you want to keep on editing your file."
 [connection signal="item_selected" from="FileBrowserContainer/GameSelectorContainer/GameSelector" to="." method="_on_GameSelector_item_selected"]
+[connection signal="pressed" from="FileBrowserContainer/GameSelectorContainer/SelectGamePath" to="." method="_on_SelectGamePath_pressed"]
 [connection signal="dir_selected" from="OpenFileDialog" to="." method="_on_OpenFileDialog_dir_selected"]

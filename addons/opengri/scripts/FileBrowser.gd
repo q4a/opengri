@@ -78,6 +78,10 @@ func _on_OpenFileDialog_dir_selected(dir) -> void:
 	
 	GamePath.set_text(game_obj.path)
 
+func _on_SelectGamePath_pressed() -> void:
+	var id = GameSelector.selected
+	if id != -1 and id != 0:
+		show_OpenFileDialog()
 
 ########## Config file ##########
 
