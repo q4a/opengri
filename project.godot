@@ -21,11 +21,11 @@ config/icon="res://icon.png"
 
 [autoload]
 
-IconLoader="*res://addons/opengri/scripts/IconLoader.gd"
+IconLoader="*res://addons/OpenGRI/Scripts/IconLoader.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "godot-plugin-refresher", "opengri" )
+enabled=PoolStringArray( "godot-plugin-refresher", "OpenGRI" )
 
 [rendering]
 
