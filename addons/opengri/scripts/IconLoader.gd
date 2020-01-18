@@ -11,7 +11,7 @@ func load(icon_name : String) -> ImageTexture:
 	var image = Image.new()
 	var texture = ImageTexture.new()
 	
-	file.open("res://addons/opengri/icons/"+icon_name+".png", File.READ)
+	file.open("res://addons/OpenGRI/Icons/"+icon_name+".png", File.READ)
 	var buffer = file.get_buffer(file.get_len())
 	file.close()
 	

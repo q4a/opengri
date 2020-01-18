@@ -1,7 +1,7 @@
 tool
 extends EditorPlugin
 
-var doc = preload("res://addons/opengri/scenes/FileBrowser.tscn").instance()
+var doc = preload("res://addons/OpenGRI/Scenes/FileBrowser.tscn").instance()
 
 func _enter_tree():
 	get_editor_interface().get_editor_viewport().add_child(doc)

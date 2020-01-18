@@ -3,7 +3,7 @@ extends Control
 
 # Constants
 const CONFIG_FILE = "user://opengri.cfg"
-const GameClass = preload("res://addons/opengri/classes/GameClass.gd")
+const GameClass = preload("res://addons/OpenGRI/Scripts/GameClass.gd")
 
 onready var GameSelector = $FileBrowserContainer/GameSelectorContainer/GameSelector
 onready var GamePath = $FileBrowserContainer/GameSelectorContainer/GamePath
@@ -31,7 +31,7 @@ func clean_editor() -> void :
 func update_version():
 	var plugin_version = ""
 	var config =  ConfigFile.new()
-	var err = config.load("res://addons/opengri/plugin.cfg")
+	var err = config.load("res://addons/OpenGRI/plugin.cfg")
 	if err == OK:
 		plugin_version = config.get_value("plugin","version")
 	Version.set_text("v"+plugin_version)
@@ -44,6 +44,7 @@ func fill_GameSelector():
 	
 	add_item_GameSelector(1, {title = "GTA IV", cfg_key = "GTA_IV"})
 	add_item_GameSelector(2, {title = "GTA IV: EFLC", cfg_key = "GTA_IV_EFLC"})
+	add_item_GameSelector(3, {title = "Custom folder", cfg_key = "Custom"})
 
 func setup_FileList():
 	FileList.set_column_title(0, "Name")
@@ -71,7 +72,7 @@ func _on_GameSelector_item_selected(id):
 	else:
 		var game_obj = GameSelector.get_item_metadata(id)
 		var game_path
-		print("game_key=" + game_obj.cfg_key)
+#		print("game_key=" + game_obj.cfg_key)
 		if game_obj.path != "":
 			_on_OpenFileDialog_dir_selected(game_obj.path)
 		else:
