@@ -20,6 +20,7 @@ onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
 func _ready():
 	update_version()
 	fill_GameSelector()
+	setup_FileList()
 	load_config()
 
 func clean_editor() -> void :
@@ -44,6 +45,17 @@ func fill_GameSelector():
 	add_item_GameSelector(1, {title = "GTA IV", cfg_key = "GTA_IV"})
 	add_item_GameSelector(2, {title = "GTA IV: EFLC", cfg_key = "GTA_IV_EFLC"})
 
+func setup_FileList():
+	FileList.set_column_title(0, "Name")
+	FileList.set_column_title(1, "Size")
+	FileList.set_column_expand(1, false)
+	FileList.set_column_min_width (1, 70)
+	FileList.set_column_title(2, "Resource")
+	FileList.set_column_expand(2, false)
+	FileList.set_column_min_width (2, 100)
+	
+	FileList.set_column_titles_visible(true)
+
 func add_item_GameSelector(id, params = {}):
 	var g = GameClass.new()
 	g.constructor(params)
@@ -61,10 +73,8 @@ func _on_GameSelector_item_selected(id):
 		var game_path
 		print("game_key=" + game_obj.cfg_key)
 		if game_obj.path != "":
-#			print("game_path1="+game_path)
 			_on_OpenFileDialog_dir_selected(game_obj.path)
 		else:
-#			print("game_path2="+game_path)
 			show_OpenFileDialog()
 
 func _on_OpenFileDialog_dir_selected(dir) -> void:
@@ -125,6 +135,9 @@ func load_tree_recurs(dir: Directory, tree_item: TreeItem):
 
 ########## FileList methods ##########
 func load_files(dir: Directory):
+	FileList.clear()
+	var tree_root = FileList.create_item()
+	
 	dir.list_dir_begin(true, false)
 	var file_name = dir.get_next()
 
@@ -132,8 +145,12 @@ func load_files(dir: Directory):
 		var path = dir.get_current_dir() + "/" + file_name
 		
 		if !dir.current_is_dir():
-			print("file: "+path)
-			FileList.add_item(path.get_file(), IconLoader.load("file"), true)
+#			print("file: "+path)
+			var item = FileList.create_item(tree_root)
+			item.set_text(0, file_name)
+			item.set_icon(0, IconLoader.load("file"))
+			item.set_text(1, "*** KB")
+			item.set_text(2, "Yes (to test)")
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
