@@ -157,4 +157,5 @@ dialog_text = "There are some unsaved changes.
 Press \"OK\" if you want to close this tab anyway, or \"cancel\" if you want to keep on editing your file."
 [connection signal="item_selected" from="FileBrowserContainer/GameSelectorContainer/GameSelector" to="." method="_on_GameSelector_item_selected"]
 [connection signal="pressed" from="FileBrowserContainer/GameSelectorContainer/SelectGamePath" to="." method="_on_SelectGamePath_pressed"]
+[connection signal="cell_selected" from="FileBrowserContainer/SplitContainer/TreeContainer/PathTree" to="." method="_on_PathTree_cell_selected"]
 [connection signal="dir_selected" from="OpenFileDialog" to="." method="_on_OpenFileDialog_dir_selected"]

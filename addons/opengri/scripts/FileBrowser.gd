@@ -94,6 +94,16 @@ func _on_SelectGamePath_pressed() -> void:
 	if id != -1 and id != 0:
 		show_OpenFileDialog()
 
+func _on_PathTree_cell_selected():
+	var path = PathTree.get_selected().get_metadata(0)
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		load_files(dir)
+	else:
+		push_error("An error occurred when trying to access the path.")
+#
+#	print("_on_PathTree_cell_selected")
+
 
 ########## PathTree methods ##########
 func load_tree(path: String, title: String):
@@ -101,35 +111,35 @@ func load_tree(path: String, title: String):
 	if dir.open(path) == OK:
 		PathTree.clear()
 		FileList.clear()
-		load_files(dir)
+#		load_files(dir)
 		
 		var root = PathTree.create_item()
 		root.set_text(0, title)
+		root.set_metadata(0, path)
 		root.select(0)
 		
-		dir.list_dir_begin(true, false)
 		load_tree_recurs(dir, root)
 	else:
 		push_error("An error occurred when trying to access the path.")
 
 func load_tree_recurs(dir: Directory, tree_item: TreeItem):
-	var file_name = dir.get_next()
+	dir.list_dir_begin(true, false)
+	var dir_name = dir.get_next()
 
-	while (file_name != ""):
-		var path = dir.get_current_dir() + "/" + file_name
+	while (dir_name != ""):
+		var path = dir.get_current_dir() + "/" + dir_name
 		
 		if dir.current_is_dir():
 #			print("directory: "+path)
 			var sub_item = PathTree.create_item(tree_item)
-			sub_item.set_text(0, file_name)
+			sub_item.set_text(0, dir_name)
 			sub_item.set_metadata(0, path)
 			
 			var sub_dir = Directory.new()
 			sub_dir.open(path)
-			sub_dir.list_dir_begin(true, false)
 			load_tree_recurs(sub_dir, sub_item)
 		
-		file_name = dir.get_next()
+		dir_name = dir.get_next()
 	
 	dir.list_dir_end()
 
@@ -221,3 +231,5 @@ func show_OpenFileDialog():
 #	OpenFileDialog.invalidate()
 	OpenFileDialog.popup()
 	OpenFileDialog.set_position(OS.get_screen_size()/2 - OpenFileDialog.get_size()/2)
+
+
