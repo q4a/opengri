@@ -19,6 +19,10 @@ config/name="opengri"
 run/main_scene="res://root.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+IconLoader="*res://addons/opengri/scripts/IconLoader.gd"
+
 [editor_plugins]
 
 enabled=PoolStringArray( "godot-plugin-refresher", "opengri" )

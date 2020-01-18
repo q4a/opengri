@@ -85,14 +85,17 @@ func _on_SelectGamePath_pressed() -> void:
 		show_OpenFileDialog()
 
 
-########## Tree methods ##########
+########## PathTree methods ##########
 func load_tree(path: String, title: String):
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		PathTree.clear()
 		FileList.clear()
+		load_files(dir)
+		
 		var root = PathTree.create_item()
 		root.set_text(0, title)
+		root.select(0)
 		
 		dir.list_dir_begin(true, false)
 		load_tree_recurs(dir, root)
@@ -114,13 +117,25 @@ func load_tree_recurs(dir: Directory, tree_item: TreeItem):
 			sub_dir.open(path)
 			sub_dir.list_dir_begin(true, false)
 			load_tree_recurs(sub_dir, sub_item)
-#		else:
-#			print("Found file: %s" % path)
 		
 		file_name = dir.get_next()
 	
 	dir.list_dir_end()
 
+
+########## FileList methods ##########
+func load_files(dir: Directory):
+	dir.list_dir_begin(true, false)
+	var file_name = dir.get_next()
+
+	while (file_name != ""):
+		var path = dir.get_current_dir() + "/" + file_name
+		
+		if !dir.current_is_dir():
+			print("file: "+path)
+			FileList.add_item(path.get_file(), IconLoader.load("file"), true)
+		file_name = dir.get_next()
+	dir.list_dir_end()
 
 ########## Config file ##########
 
@@ -135,7 +150,6 @@ func load_config():
 			game_obj = GameSelector.get_item_metadata(id)
 			if config.has_section_key("games", game_obj.cfg_key):
 				game_obj.path = config.get_value("games", game_obj.cfg_key)
-			
 #			print("game_key="+game_obj.cfg_key+" game_path="+game_obj.path)
 
 func save_to_config(section, key, value):
