@@ -122,6 +122,7 @@ func load_tree_recurs(dir: Directory, tree_item: TreeItem):
 #			print("directory: "+path)
 			var sub_item = PathTree.create_item(tree_item)
 			sub_item.set_text(0, file_name)
+			sub_item.set_metadata(0, path)
 			
 			var sub_dir = Directory.new()
 			sub_dir.open(path)
@@ -145,11 +146,46 @@ func load_files(dir: Directory):
 		var path = dir.get_current_dir() + "/" + file_name
 		
 		if !dir.current_is_dir():
-#			print("file: "+path)
+			var file = File.new()
+			file.open(path, File.READ)
+			var size = file.get_len()
+			file.close()
+			
+#			print("file: "+file_name+" size: "+str(size))
+			var size_short = float(size)
+			var dimension = 0
+			while (size_short > 1024):
+				dimension = dimension + 1
+				size_short = size_short / 1024
+			
+			size_short = str(size_short).left(4)
+#			var length = size_short.length()
+#			while (length != 4):
+#				length = length + 1
+#				size_short = " "+size_short
+			
+			if size_short.right(3) == ".":
+				size_short = size_short.left(3)
+			if dimension == 0:
+				dimension = " B"
+			elif dimension == 1:
+				dimension = " KB"
+			elif dimension == 2:
+				dimension = " MB"
+			elif dimension == 3:
+				dimension = " GB"
+			elif dimension == 4:
+				dimension = " TB"
+			elif dimension > 4:
+				dimension = " *B"
+			size_short = size_short + dimension
+			
 			var item = FileList.create_item(tree_root)
 			item.set_text(0, file_name)
 			item.set_icon(0, IconLoader.load("file"))
-			item.set_text(1, "*** KB")
+			item.set_metadata(0, path)
+			item.set_text(1, size_short)
+			item.set_metadata(1, size)
 			item.set_text(2, "Yes (to test)")
 		file_name = dir.get_next()
 	dir.list_dir_end()
