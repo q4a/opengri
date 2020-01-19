@@ -21,10 +21,17 @@ var FSDirectory = preload("res://addons/OpenGRI/RageLib/FileSystem/Common/FSDire
 
 func _ready():
 	var my = FSDirectory.new()
+	my.Name = "test_N"
 	var ter = my.IsDirectory()
 	print("is="+str(ter))
-	my._fsObjects.append("sds")
+#	print("is="+str(ter)+" Name="+str(my.Name))
+	for i in my:
+		print("my_Name="+i.Name)
+	
+	my.AddObject(my)
 	print("my size="+str(my._fsObjects.size()))
+	for i in my:
+		print("my_Name="+i.Name)
 
 #	var Flags = 3562536976
 #	var i = int(Flags & 0x7FF) << int(((Flags >> 11) & 0xF) + 8)

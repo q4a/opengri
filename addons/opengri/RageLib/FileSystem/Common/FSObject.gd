@@ -21,7 +21,7 @@
 extends Node
 
 class FSObject:
-	var Name: String
+	export var Name: String
 	var ParentDirectory
 	var FullName: String
 	
