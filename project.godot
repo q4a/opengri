@@ -25,7 +25,7 @@ IconLoader="*res://addons/OpenGRI/Scripts/IconLoader.gd"
 
 [editor_plugins]
 
-enabled=PoolStringArray( "godot-plugin-refresher", "OpenGRI" )
+enabled=PoolStringArray( "OpenGRI", "godot-plugin-refresher" )
 
 [rendering]
 
