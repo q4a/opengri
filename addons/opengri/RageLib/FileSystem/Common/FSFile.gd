@@ -20,7 +20,5 @@
 
 extends Node
 
-const CompressionType = {
-		LZX = 0xF505,
-		Deflate = 0xDA78,
-	}
+class myFile:
+	const MagicBigEndian: int = 0x52534305

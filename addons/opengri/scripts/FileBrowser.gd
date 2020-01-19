@@ -2,7 +2,7 @@ tool
 extends Control
 
 # Constants
-const CONFIG_FILE = "user://opengri.cfg"
+const CONFIG_FILE = "user://OpenGRI.cfg"
 const GameClass = preload("res://addons/OpenGRI/Scripts/GameClass.gd")
 
 onready var GameSelector = $FileBrowserContainer/GameSelectorContainer/GameSelector
@@ -17,7 +17,18 @@ onready var OpenFileDialog = $OpenFileDialog
 onready var NewFileDialog = $NewFileDialog
 onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
 
+var FSDirectory = preload("res://addons/OpenGRI/RageLib/FileSystem/Common/FSDirectory.gd").FSDirectory
+
 func _ready():
+	var my = FSDirectory.new()
+	var ter = my.IsDirectory()
+	print("is="+str(ter))
+	my._fsObjects.append("sds")
+	print("my size="+str(my._fsObjects.size()))
+
+#	var Flags = 3562536976
+#	var i = int(Flags & 0x7FF) << int(((Flags >> 11) & 0xF) + 8)
+#	print("Flags="+str(i)+" F="+str(16 << 8)+" i="+str(int(Flags & 0x7FF))+" 2="+str(int(((Flags >> 11) & 0xF) + 8)))
 	update_version()
 	fill_GameSelector()
 	setup_FileList()
@@ -28,7 +39,7 @@ func clean_editor() -> void :
 	PathTree.clear()
 	FileList.clear()
 
-func update_version():
+func update_version() -> void:
 	var plugin_version = ""
 	var config =  ConfigFile.new()
 	var err = config.load("res://addons/OpenGRI/plugin.cfg")
@@ -36,7 +47,7 @@ func update_version():
 		plugin_version = config.get_value("plugin","version")
 	Version.set_text("v"+plugin_version)
 
-func fill_GameSelector():
+func fill_GameSelector() -> void:
 	GameSelector.clear()
 	var g = GameClass.new()
 	g.constructor({title = "-- Select game --"})
@@ -46,7 +57,7 @@ func fill_GameSelector():
 	add_item_GameSelector(2, {title = "GTA IV: EFLC", cfg_key = "GTA_IV_EFLC"})
 	add_item_GameSelector(3, {title = "Custom folder", cfg_key = "Custom"})
 
-func setup_FileList():
+func setup_FileList() -> void:
 	FileList.set_column_title(0, "Name")
 	FileList.set_column_title(1, "Size")
 	FileList.set_column_expand(1, false)
@@ -57,7 +68,7 @@ func setup_FileList():
 	
 	FileList.set_column_titles_visible(true)
 
-func add_item_GameSelector(id, params = {}):
+func add_item_GameSelector(id, params = {}) -> void:
 	var g = GameClass.new()
 	g.constructor(params)
 	GameSelector.add_item(g.title, id)
@@ -66,7 +77,8 @@ func add_item_GameSelector(id, params = {}):
 
 ########## Signals ##########
 
-func _on_GameSelector_item_selected(id):
+func _on_GameSelector_item_selected(id) -> void:
+#	print("_on_GameSelector_item_selected")
 	if id == 0: 
 		clean_editor()
 	else:
@@ -79,6 +91,7 @@ func _on_GameSelector_item_selected(id):
 			show_OpenFileDialog()
 
 func _on_OpenFileDialog_dir_selected(dir) -> void:
+#	print("_on_OpenFileDialog_dir_selected")
 	var id = GameSelector.selected
 	if id == -1:
 		return
@@ -89,25 +102,27 @@ func _on_OpenFileDialog_dir_selected(dir) -> void:
 	
 	GamePath.set_text(game_obj.path)
 	load_tree(game_obj.path, game_obj.title)
+	if (game_obj.cfg_key == "GTA_IV" or
+		game_obj.cfg_key == "GTA_IV_EFLC"):
+			LoadGameDirectory(game_obj)
 
 func _on_SelectGamePath_pressed() -> void:
 	var id = GameSelector.selected
 	if id != -1 and id != 0:
 		show_OpenFileDialog()
 
-func _on_PathTree_cell_selected():
+func _on_PathTree_cell_selected() -> void:
+#	print("_on_PathTree_cell_selected")
 	var path = PathTree.get_selected().get_metadata(0)
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		load_files(dir)
 	else:
 		push_error("An error occurred when trying to access the path.")
-#
-#	print("_on_PathTree_cell_selected")
 
 
 ########## PathTree methods ##########
-func load_tree(path: String, title: String):
+func load_tree(path: String, title: String) -> void:
 	var dir = Directory.new()
 	if dir.open(path) == OK:
 		PathTree.clear()
@@ -123,7 +138,7 @@ func load_tree(path: String, title: String):
 	else:
 		push_error("An error occurred when trying to access the path.")
 
-func load_tree_recurs(dir: Directory, tree_item: TreeItem):
+func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
 	dir.list_dir_begin(true, false)
 	var dir_name = dir.get_next()
 
@@ -146,7 +161,7 @@ func load_tree_recurs(dir: Directory, tree_item: TreeItem):
 
 
 ########## FileList methods ##########
-func load_files(dir: Directory):
+func load_files(dir: Directory) -> void:
 	FileList.clear()
 	var tree_root = FileList.create_item()
 	
@@ -203,7 +218,7 @@ func load_files(dir: Directory):
 
 ########## Config file ##########
 
-func load_config():
+func load_config() -> void:
 	var config = ConfigFile.new()
 	var err = config.load(CONFIG_FILE)
 	if err: # File is missing, create default config
@@ -216,7 +231,7 @@ func load_config():
 				game_obj.path = config.get_value("games", game_obj.cfg_key)
 #			print("game_key="+game_obj.cfg_key+" game_path="+game_obj.path)
 
-func save_to_config(section, key, value):
+func save_to_config(section, key, value) -> void:
 	var config = ConfigFile.new()
 	var err = config.load(CONFIG_FILE)
 	if err:
@@ -226,11 +241,14 @@ func save_to_config(section, key, value):
 		config.save(CONFIG_FILE)
 
 
-########## Additional methods ##########
+########## Dialogs methods ##########
 
-func show_OpenFileDialog():
+func show_OpenFileDialog() -> void:
 #	OpenFileDialog.invalidate()
 	OpenFileDialog.popup()
 	OpenFileDialog.set_position(OS.get_screen_size()/2 - OpenFileDialog.get_size()/2)
 
-
+########## GTA specific methods ##########
+func LoadGameDirectory(game_obj: GameClass) -> void:
+#	FileSystem fs = new RealFileSystem();
+	pass

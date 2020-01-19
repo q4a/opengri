@@ -18,9 +18,16 @@
 
 """
 
-extends Node
+extends "FSObject.gd".FSObject
 
-const CompressionType = {
-		LZX = 0xF505,
-		Deflate = 0xDA78,
-	}
+class FSDirectory:
+	var _fsObjects: Array
+	var _fsObjectsByName: Dictionary 
+	
+	func IsDirectory() -> bool:
+		print("43FSDirectory.IsDirectory")
+		return true
+	
+#	func _init():
+#		_fsObjects = []
+#		_fsObjectsByName = {}

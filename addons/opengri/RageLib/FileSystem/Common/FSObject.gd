@@ -20,7 +20,11 @@
 
 extends Node
 
-const CompressionType = {
-		LZX = 0xF505,
-		Deflate = 0xDA78,
-	}
+class FSObject:
+	var Name: String
+	var ParentDirectory
+	var FullName: String
+	
+#	func IsDirectory() -> bool:
+#		print("FSDirectory.IsDirectory")
+#		return false
