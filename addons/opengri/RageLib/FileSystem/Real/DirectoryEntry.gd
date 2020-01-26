@@ -18,8 +18,12 @@
 
 """
 
-extends FSObject
-class_name FSFile
+extends RealEntry
+class_name DirectoryEntry
 
-func IsDirectory() -> bool:
-	return false
+var _directory: Directory
+var _subdirs: Array # of Directory
+var _files: Array # of File
+
+func _init(context: RealContext, directory: Directory):
+	pass

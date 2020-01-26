@@ -18,8 +18,11 @@
 
 """
 
-extends FSObject
-class_name FSFile
+extends Object
+class_name RealEntry
 
-func IsDirectory() -> bool:
-	return false
+var Name: String
+
+#func IsDirectory() -> bool:
+#	print("RealEntry.IsDirectory")
+#	return false

@@ -18,8 +18,12 @@
 
 """
 
-extends FSObject
-class_name FSFile
+extends Object
+class_name RealContext
 
-func IsDirectory() -> bool:
-	return false
+var _directory: Directory
+var RootDirectory: DirectoryEntry
+
+func _init(directory: Directory):
+	_directory = directory;
+	RootDirectory = DirectoryEntry.new(self, _directory)

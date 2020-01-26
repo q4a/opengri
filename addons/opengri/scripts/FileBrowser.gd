@@ -3,7 +3,6 @@ extends Control
 
 # Constants
 const CONFIG_FILE = "user://OpenGRI.cfg"
-const GameClass = preload("res://addons/OpenGRI/Scripts/GameClass.gd")
 
 onready var GameSelector = $FileBrowserContainer/GameSelectorContainer/GameSelector
 onready var GamePath = $FileBrowserContainer/GameSelectorContainer/GamePath
@@ -17,10 +16,16 @@ onready var OpenFileDialog = $OpenFileDialog
 onready var NewFileDialog = $NewFileDialog
 onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
 
-const FSDirectory = preload("res://addons/OpenGRI/RageLib/FileSystem/Common/FSDirectory.gd")
-
 func _ready():
+	update_version()
+	fill_GameSelector()
+	setup_FileList()
+	load_config()
+	
 	#begin tests
+	var game_obj = GameSelector.get_item_metadata(1)
+	LoadGameDirectory(game_obj)
+	
 	var my = FSDirectory.new()
 	my.Name = "testt_N"
 	var ter = my.IsDirectory()
@@ -52,10 +57,6 @@ func _ready():
 #	print("Flags="+str(i)+" F="+str(16 << 8)+" i="+str(int(Flags & 0x7FF))+" 2="+str(int(((Flags >> 11) & 0xF) + 8)))
 	
 	#end tests
-	update_version()
-	fill_GameSelector()
-	setup_FileList()
-	load_config()
 
 func clean_editor() -> void :
 	GamePath.clear()
@@ -72,8 +73,7 @@ func update_version() -> void:
 
 func fill_GameSelector() -> void:
 	GameSelector.clear()
-	var g = GameClass.new()
-	g.constructor({title = "-- Select game --"})
+	var g = GameClass.new({title = "-- Select game --"})
 	GameSelector.add_item(g.title, 0)
 	
 	add_item_GameSelector(1, {title = "GTA IV", cfg_key = "GTA_IV"})
@@ -92,8 +92,7 @@ func setup_FileList() -> void:
 	FileList.set_column_titles_visible(true)
 
 func add_item_GameSelector(id, params = {}) -> void:
-	var g = GameClass.new()
-	g.constructor(params)
+	var g = GameClass.new(params)
 	GameSelector.add_item(g.title, id)
 	GameSelector.set_item_metadata(id, g)
 
@@ -274,4 +273,25 @@ func show_OpenFileDialog() -> void:
 ########## GTA specific methods ##########
 func LoadGameDirectory(game_obj: GameClass) -> void:
 #	FileSystem fs = new RealFileSystem();
+	print("Load "+game_obj.cfg_key+" with path="+game_obj.path)
+#	string gamePath = keyUtil.FindGameDirectory();
+	
+#	byte[] key = keyUtil.FindKey( gamePath );
+#	if (key == null)
+#	{
+#		string message = "Your " + keyUtil.ExecutableName + " seems to be modified or is a newer version than this tool supports. " +
+#		"SparkIV can not run without a supported " + keyUtil.ExecutableName + " file." + "\n" + "Would you like to check for updates?";
+#		string caption = "Newer or Modified " + keyUtil.ExecutableName;
+#
+#		if (MessageBox.Show(message, caption, MessageBoxButtons.YesNo, MessageBoxIcon.Error) == DialogResult.Yes)
+#		{
+#			Updater.CheckForUpdate();
+#		}
+#
+#		return;
+#	}
+#
+#	KeyStore.SetKeyLoader(() => key);
+#	fs.Open(gamePath);
+	
 	pass

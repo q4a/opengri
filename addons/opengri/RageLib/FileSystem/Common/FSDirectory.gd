@@ -21,11 +21,8 @@
 extends FSObject
 class_name FSDirectory
 
-#func FullName() -> String:
-#	return .FullName()
-
-var _fsObjects: Array
-var _fsObjectsByName: Dictionary 
+var _fsObjects: Array # of FSObject
+var _fsObjectsByName: Dictionary # of {string: FSObject}
 
 func IsDirectory() -> bool:
 #	print("FSDirectory.IsDirectory")
@@ -69,7 +66,3 @@ func _iter_next(arg):
 func _iter_get(arg):
 	return _fsObjects[current]
 #endregion IEnumerable
-	
-#func _init():
-#	_fsObjects = []
-#	_fsObjectsByName = {}
