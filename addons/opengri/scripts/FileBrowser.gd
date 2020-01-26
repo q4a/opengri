@@ -26,6 +26,11 @@ func _ready():
 	var game_obj = GameSelector.get_item_metadata(1)
 	LoadGameDirectory(game_obj)
 	
+#	push_error("Test error")
+	print("get_base_dir="+game_obj.path.get_base_dir())
+	var test_path = game_obj.path + ".txt"
+	print("get_file="+test_path.get_file())
+	
 	var my = FSDirectory.new()
 	my.Name = "test_N"
 	var ter = my.IsDirectory()
@@ -273,7 +278,7 @@ func show_OpenFileDialog() -> void:
 
 ########## GTA specific methods ##########
 func LoadGameDirectory(game_obj: GameClass) -> void:
-#	FileSystem fs = new RealFileSystem();
+	var fs = RealFileSystem.new()
 	print("Load "+game_obj.cfg_key+" with path="+game_obj.path)
 #	string gamePath = keyUtil.FindGameDirectory();
 	
@@ -293,6 +298,4 @@ func LoadGameDirectory(game_obj: GameClass) -> void:
 #	}
 #
 #	KeyStore.SetKeyLoader(() => key);
-#	fs.Open(gamePath);
-	
-	pass
+	fs.Open(game_obj.path);

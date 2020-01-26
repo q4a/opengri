@@ -34,10 +34,10 @@ func DumpFSToDebug() -> void:
 	DumpDirToDebug("", RootDirectory)
 
 func DumpDirToDebug(indent: String, dir: FSDirectory) -> void:
-	print("Debug: " + indent + dir.Name)
+	push_error(indent + dir.Name)
 	indent += "  "
 	for item in dir:
 		if item.IsDirectory():
 			DumpDirToDebug(indent, item)
 		else:
-			print("Debug: " + indent + item.Name + " (Size: " + item.Size + ", Compressed: " + item.IsCompressed + ")")
+			push_error(indent + item.Name + " (Size: " + item.Size + ", Compressed: " + item.IsCompressed + ")")

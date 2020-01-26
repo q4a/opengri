@@ -21,9 +21,10 @@
 extends Object
 class_name RealContext
 
-var _directory: Directory
-var RootDirectory: DirectoryEntry
+var _directory: String
+var RootDirectory#FixCyclicRef: DirectoryEntry
 
-func _init(directory: Directory):
+func _init(directory: String):
 	_directory = directory;
-	RootDirectory = DirectoryEntry.new(self, _directory)
+	#FIXME: !!!
+#FixCyclicRef	RootDirectory = DirectoryEntry.new(self, _directory)

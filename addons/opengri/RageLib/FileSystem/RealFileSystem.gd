@@ -21,7 +21,7 @@
 extends FileSystem
 class_name RealFileSystem
 
-var _context: RealContext
+var _context#: RealContext
 
 #TODO: this has to be refactored to be part of Real.FileEntry
 var _customData: Dictionary # of {string: byte[]}
@@ -29,33 +29,31 @@ var _realDirectory: String
 
 func Open(filename: String) -> void:
 	_realDirectory = filename
-	var dir = Directory.new()
-	dir.open(filename)
-	_context = RealContext.new(dir)
+	_context = RealContext.new(filename)
 	
 	BuildFS()
 
-func BuildFSDirectory(dirEntry: DirectoryEntry, fsDirectory: FSDirectory) -> void:
+func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
+					, fsDirectory: FSDirectory) -> void:
 	fsDirectory.Name = dirEntry.Name
 	
-	var dir = dirEntry._directory
+	var dir = Directory.new()
+	dir.open(dirEntry._directory)
 	dir.list_dir_begin(true, false)
 	var file_name = dir.get_next()
 	
 	var path
 	while file_name != "":
-		path = dir.get_current_dir() + "/" + dir_name
+		path = dir.get_current_dir() + "/" + file_name
 		
 		if dir.current_is_dir():
 			var sub_dir = FSDirectory.new()
-#####????####			sub_dir.open(path)
-			BuildFSDirectory(sub_dir, sub_dir)
-#			dir.ParentDirectory = fsDirectory;
-#			fsDirectory.AddObject(dir)
-			
-			print("Found directory: " + file_name)
+			BuildFSDirectory(dirEntry.GetDirectory(path), sub_dir)
+			dir.ParentDirectory = fsDirectory
+			fsDirectory.AddObject(dir)
 		else:
 			print("Found file: " + file_name)
+		
 		file_name = dir.get_next()
 		
 	dir.list_dir_end()
@@ -90,5 +88,6 @@ func BuildFSDirectory(dirEntry: DirectoryEntry, fsDirectory: FSDirectory) -> voi
 #		fsDirectory.AddObject(file)
 
 func BuildFS() -> void:
+	print("BuildFS")
 	RootDirectory = FSDirectory.new()
 	BuildFSDirectory(_context.RootDirectory, RootDirectory)

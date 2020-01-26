@@ -23,17 +23,18 @@ class_name FileEntry
 
 const TypeOfResource = preload("res://addons/OpenGRI/RageLib/Common/Resources/ResourceType.gd")
 
-var _file: File
+var _file: String
 var ResourceType: TypeOfResource
 var IsResourceFile: bool
 var _resourceFiles = [".wtd", ".wdr", ".wdd", ".wft",
 					  ".wpfl", ".whm", ".wad", ".wbd", 
 					  ".wbn", ".wbs"]
 
-func _init(context: RealContext, file: File):
+func _init(context#FixCyclicRef: RealContext
+		, file: String):
 	Context = context
 	_file = file;
-	Name = _file.get_path() #FIXME: there should be Name, not FullPath
+	Name = _file.get_file()
 	
 	var ext = Name.get_extension()
 	print("#FIXME: just do it")

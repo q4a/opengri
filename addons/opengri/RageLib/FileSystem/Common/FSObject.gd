@@ -22,7 +22,7 @@ extends Object
 class_name FSObject
 
 var Name: String
-var ParentDirectory: FSObject
+var ParentDirectory: Directory
 
 func FullName() -> String:
 	if ParentDirectory == null:

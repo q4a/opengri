@@ -21,31 +21,22 @@
 extends RealEntry
 class_name DirectoryEntry
 
-var _directory: Directory
-var _subdirs: Array # of Directory
-var _files: Array # of File
+var _directory: String
 
-func _init(context: RealContext, directory: Directory):
+func _init(context#FixCyclicRef: RealContext
+		, directory: String):
 	Context = context
 	_directory = directory;
-	Name = _directory.get_current_dir() #FIXME: there should be Name, not FullPath
-	
-	#FIXME: ? fill _subdirs and _files
-#	_subdirs = directory.GetDirectories();
-#	_files = directory.GetFiles();
+	Name = _directory.get_file()
 
 func IsDirectory() -> bool:
 	return true
 
 func GetDirectory(path: String) -> DirectoryEntry:
-	var dir = Directory.new()
-	dir.open(path)
-	return DirectoryEntry.new(Context, dir)
+	return DirectoryEntry.new(Context, path)
 
-func GetFile(path: String) -> FileEntry:
-	var dir = File.new()
-	dir.open(path)
-	return DirectoryEntry.new(Context, dir)
+func GetFile(path: String):#FixCyclicRef -> FileEntry:
+	return FileEntry.new(Context, path)
 
 
 #public int DirectoryCount
