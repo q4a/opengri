@@ -17,25 +17,41 @@ onready var OpenFileDialog = $OpenFileDialog
 onready var NewFileDialog = $NewFileDialog
 onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
 
-var FSDirectory = preload("res://addons/OpenGRI/RageLib/FileSystem/Common/FSDirectory.gd").FSDirectory
+const FSDirectory = preload("res://addons/OpenGRI/RageLib/FileSystem/Common/FSDirectory.gd")
 
 func _ready():
+	#begin tests
 	var my = FSDirectory.new()
-	my.Name = "test_N"
+	my.Name = "testt_N"
 	var ter = my.IsDirectory()
 	print("is="+str(ter))
 #	print("is="+str(ter)+" Name="+str(my.Name))
 	for i in my:
+		#empty
 		print("my_Name="+i.Name)
 	
-	my.AddObject(my)
+	var sub_dir = FSDirectory.new()
+	sub_dir.Name = "sub_dir"
+	sub_dir.ParentDirectory = my;
+	
+	var sub_dir2 = FSDirectory.new()
+	sub_dir2.Name = "sub_dir2"
+	sub_dir2.ParentDirectory = my;
+	
+	my.AddObject(sub_dir)
+	my.AddObject(sub_dir2)
 	print("my size="+str(my._fsObjects.size()))
 	for i in my:
-		print("my_Name="+i.Name)
+		print("sub_Name="+i.Name)
+		print("sub_FullName="+i.FullName())
+	print("my_FullName="+my.FullName())
+	print("s2_FullName="+my["1"].FullName())
 
 #	var Flags = 3562536976
 #	var i = int(Flags & 0x7FF) << int(((Flags >> 11) & 0xF) + 8)
 #	print("Flags="+str(i)+" F="+str(16 << 8)+" i="+str(int(Flags & 0x7FF))+" 2="+str(int(((Flags >> 11) & 0xF) + 8)))
+	
+	#end tests
 	update_version()
 	fill_GameSelector()
 	setup_FileList()

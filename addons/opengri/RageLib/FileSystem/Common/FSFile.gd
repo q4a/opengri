@@ -20,5 +20,16 @@
 
 extends Node
 
-class myFile:
+var FSDirectory = preload("res://addons/OpenGRI/RageLib/FileSystem/Common/FSDirectory.gd")
+
+class FSFile:
+	var Name: String
+	var ParentDirectory: FSDirectory
+#	func FullName() -> String:
+#		var path = ParentDirectory.FullName()
+#		if path == "":
+#			return Name
+#		else:
+#			return path+"/"+Name
+	
 	const MagicBigEndian: int = 0x52534305

@@ -18,13 +18,18 @@
 
 """
 
-extends Node
+extends Object
+class_name FSObject
 
-class FSObject:
-	export var Name: String
-	var ParentDirectory
-	var FullName: String
-	
-#	func IsDirectory() -> bool:
-#		print("FSDirectory.IsDirectory")
-#		return false
+var Name: String
+var ParentDirectory: FSObject
+
+func FullName() -> String:
+	if ParentDirectory == null:
+		return Name
+	else:
+		return ParentDirectory.FullName() + "/" + Name
+
+#func IsDirectory() -> bool:
+#	print("FSObject.IsDirectory")
+#	return false

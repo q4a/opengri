@@ -8,9 +8,20 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "FSObject",
+"class": "FSDirectory",
+"language": "GDScript",
+"path": "res://addons/OpenGRI/RageLib/FileSystem/Common/FSDirectory.gd"
+}, {
+"base": "Object",
+"class": "FSObject",
+"language": "GDScript",
+"path": "res://addons/OpenGRI/RageLib/FileSystem/Common/FSObject.gd"
+} ]
 _global_script_class_icons={
-
+"FSDirectory": "",
+"FSObject": ""
 }
 
 [application]
