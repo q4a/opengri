@@ -18,15 +18,25 @@
 
 """
 
-const ResourceType = {
-		TextureXBOX = 0x7, # xtd
-		ModelXBOX = 0x6D, # xdr
-		Generic = 0x01, # xhm / xad (Generic files as rsc?)
-		Bounds = 0x20, # xbd, wbd
-		Particles = 0x24, # xpfl
-		Particles2 = 0x1B, # xpfl
+extends RealEntry
+class_name FileEntry
 
-		Texture = 0x8, # wtd
-		Model = 0x6E, # wdr
-		ModelFrag = 0x70, #wft
-	}
+const TypeOfResource = preload("res://addons/OpenGRI/RageLib/Common/Resources/ResourceType.gd")
+
+var _file: File
+var ResourceType: TypeOfResource
+var IsResourceFile: bool
+var _resourceFiles = [".wtd", ".wdr", ".wdd", ".wft",
+					  ".wpfl", ".whm", ".wad", ".wbd", 
+					  ".wbn", ".wbs"]
+
+func _init(context: RealContext, file: File):
+	Context = context
+	_file = file;
+	Name = _file.get_path() #FIXME: there should be Name, not FullPath
+	
+	var ext = Name.get_extension()
+	print("#FIXME: just do it")
+
+func IsDirectory() -> bool:
+	return false

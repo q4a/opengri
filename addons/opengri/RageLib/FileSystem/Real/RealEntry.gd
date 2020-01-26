@@ -21,6 +21,7 @@
 extends Object
 class_name RealEntry
 
+var Context: RealContext
 var Name: String
 
 #func IsDirectory() -> bool:

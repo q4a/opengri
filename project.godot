@@ -29,6 +29,16 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://addons/OpenGRI/RageLib/FileSystem/Common/FSObject.gd"
 }, {
+"base": "RealEntry",
+"class": "FileEntry",
+"language": "GDScript",
+"path": "res://addons/OpenGRI/RageLib/FileSystem/Real/FileEntry.gd"
+}, {
+"base": "Object",
+"class": "FileSystem",
+"language": "GDScript",
+"path": "res://addons/OpenGRI/RageLib/FileSystem/Common/FileSystem.gd"
+}, {
 "base": "Object",
 "class": "GameClass",
 "language": "GDScript",
@@ -43,15 +53,23 @@ _global_script_classes=[ {
 "class": "RealEntry",
 "language": "GDScript",
 "path": "res://addons/OpenGRI/RageLib/FileSystem/Real/RealEntry.gd"
+}, {
+"base": "FileSystem",
+"class": "RealFileSystem",
+"language": "GDScript",
+"path": "res://addons/OpenGRI/RageLib/FileSystem/RealFileSystem.gd"
 } ]
 _global_script_class_icons={
 "DirectoryEntry": "",
 "FSDirectory": "",
 "FSFile": "",
 "FSObject": "",
+"FileEntry": "",
+"FileSystem": "",
 "GameClass": "",
 "RealContext": "",
-"RealEntry": ""
+"RealEntry": "",
+"RealFileSystem": ""
 }
 
 [application]

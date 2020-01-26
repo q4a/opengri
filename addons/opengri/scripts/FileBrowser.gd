@@ -27,7 +27,7 @@ func _ready():
 	LoadGameDirectory(game_obj)
 	
 	var my = FSDirectory.new()
-	my.Name = "testt_N"
+	my.Name = "test_N"
 	var ter = my.IsDirectory()
 	print("is="+str(ter))
 #	print("is="+str(ter)+" Name="+str(my.Name))
@@ -163,9 +163,10 @@ func load_tree(path: String, title: String) -> void:
 func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
 	dir.list_dir_begin(true, false)
 	var dir_name = dir.get_next()
-
-	while (dir_name != ""):
-		var path = dir.get_current_dir() + "/" + dir_name
+	
+	var path
+	while dir_name != "":
+		path = dir.get_current_dir() + "/" + dir_name
 		
 		if dir.current_is_dir():
 #			print("directory: "+path)

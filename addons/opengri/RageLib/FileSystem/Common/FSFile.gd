@@ -21,5 +21,16 @@
 extends FSObject
 class_name FSFile
 
+const TypeOfResource = preload("res://addons/OpenGRI/RageLib/Common/Resources/ResourceType.gd")
+
 func IsDirectory() -> bool:
 	return false
+
+var IsCompressed: bool
+var CompressedSize: int
+
+var Size: int
+
+var IsResource: bool
+var ResourceType: TypeOfResource
+

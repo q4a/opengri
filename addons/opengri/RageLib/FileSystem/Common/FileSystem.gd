@@ -18,15 +18,26 @@
 
 """
 
-const ResourceType = {
-		TextureXBOX = 0x7, # xtd
-		ModelXBOX = 0x6D, # xdr
-		Generic = 0x01, # xhm / xad (Generic files as rsc?)
-		Bounds = 0x20, # xbd, wbd
-		Particles = 0x24, # xpfl
-		Particles2 = 0x1B, # xpfl
+extends Object
+class_name FileSystem
 
-		Texture = 0x8, # wtd
-		Model = 0x6E, # wdr
-		ModelFrag = 0x70, #wft
-	}
+var RootDirectory: FSDirectory
+
+#public abstract void Open(string filename);
+#public abstract void Save();
+#public abstract void Rebuild();
+#public abstract void Close();
+#public abstract bool SupportsRebuild { get; }
+#public abstract bool HasDirectoryStructure { get; }
+
+func DumpFSToDebug() -> void:
+	DumpDirToDebug("", RootDirectory)
+
+func DumpDirToDebug(indent: String, dir: FSDirectory) -> void:
+	print("Debug: " + indent + dir.Name)
+	indent += "  "
+	for item in dir:
+		if item.IsDirectory():
+			DumpDirToDebug(indent, item)
+		else:
+			print("Debug: " + indent + item.Name + " (Size: " + item.Size + ", Compressed: " + item.IsCompressed + ")")

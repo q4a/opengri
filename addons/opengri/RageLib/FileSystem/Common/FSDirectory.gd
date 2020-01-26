@@ -25,7 +25,6 @@ var _fsObjects: Array # of FSObject
 var _fsObjectsByName: Dictionary # of {string: FSObject}
 
 func IsDirectory() -> bool:
-#	print("FSDirectory.IsDirectory")
 	return true
 
 func FindByName(name: String):
