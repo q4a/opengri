@@ -36,6 +36,7 @@ func Open(filename: String) -> void:
 func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 					, fsDirectory: FSDirectory) -> void:
 	fsDirectory.Name = dirEntry.Name
+	print("dirEntry.Name="+dirEntry.Name)
 	
 	var dir = Directory.new()
 	dir.open(dirEntry._directory)
@@ -52,6 +53,9 @@ func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 			dir.ParentDirectory = fsDirectory
 			fsDirectory.AddObject(dir)
 		else:
+			var fileEntry = dirEntry.GetFile(path)
+			var file = FSFile.new(_customData, fileEntry)
+			print("RealFileSystem._customData.size()="+str(_customData.size())) 
 			print("Found file: " + file_name)
 		
 		file_name = dir.get_next()
@@ -88,6 +92,5 @@ func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 #		fsDirectory.AddObject(file)
 
 func BuildFS() -> void:
-	print("BuildFS")
 	RootDirectory = FSDirectory.new()
 	BuildFSDirectory(_context.RootDirectory, RootDirectory)

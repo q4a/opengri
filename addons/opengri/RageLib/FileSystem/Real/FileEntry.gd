@@ -24,6 +24,7 @@ class_name FileEntry
 const TypeOfResource = preload("res://addons/OpenGRI/RageLib/Common/Resources/ResourceType.gd")
 
 var _file: String
+var Size: int
 var ResourceType: TypeOfResource
 var IsResourceFile: bool
 var _resourceFiles = [".wtd", ".wdr", ".wdd", ".wft",
@@ -36,8 +37,20 @@ func _init(context#FixCyclicRef: RealContext
 	_file = file;
 	Name = _file.get_file()
 	
-	var ext = Name.get_extension()
-	print("#FIXME: just do it")
+	var ext = "." + Name.get_extension()
+	if _resourceFiles.has(ext):
+		print("#FIXME: Open file stream, fill Size, read resource header and type for ext="+ext)
 
 func IsDirectory() -> bool:
 	return false
+
+func FullName() -> String:
+	return _file
+
+#func Size() -> int:
+#	return Size
+
+func GetData():
+	pass
+#	return File.ReadAllBytes(_file.FullName)
+

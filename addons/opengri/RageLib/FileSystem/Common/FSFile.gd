@@ -23,6 +23,17 @@ class_name FSFile
 
 const TypeOfResource = preload("res://addons/OpenGRI/RageLib/Common/Resources/ResourceType.gd")
 
+# You don't need Delegates
+# This 2 vars is pointers that allow to use: IsCustomData, GetData, SetData
+var _customData: Dictionary
+var _fileEntry: FileEntry
+
+func _init(customData: Dictionary, fileEntry: FileEntry) -> void:
+	_customData = customData
+	_fileEntry = fileEntry
+#	_customData[fileEntry.FullName()] = "any_data"
+#	print("FSFile._customData.size()="+str(_customData.size()))
+
 func IsDirectory() -> bool:
 	return false
 
@@ -33,4 +44,13 @@ var Size: int
 
 var IsResource: bool
 var ResourceType: TypeOfResource
+
+func IsCustomData() -> bool:
+	return _customData.has(_fileEntry.FullName())
+
+#func GetData() -> Array:
+#	pass
+#	return _customData.has(_fileEntry.FullName())
+
+
 

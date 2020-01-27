@@ -23,6 +23,13 @@ func _ready():
 	load_config()
 	
 	#begin tests
+	var dict1: Dictionary
+	dict1 = {"a": 1}
+	var dict2 = dict1
+	dict2["b"] = 2
+	print("dict1.size()"+str(dict1.size()))
+	print("dict2.size()"+str(dict2.size()))
+	
 #	var test_D = TestClass.new("temp","temp")
 #	var sub_D = test_D.CreateSubDirectory("my_sub")
 #	print("sub_D " + sub_D.Name + " " + sub_D.FullPath)

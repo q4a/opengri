@@ -24,9 +24,9 @@ class_name DirectoryEntry
 var _directory: String
 
 func _init(context#FixCyclicRef: RealContext
-		, directory: String):
+		, directory: String) -> void:
 	Context = context
-	_directory = directory;
+	_directory = directory
 	Name = _directory.get_file()
 
 func IsDirectory() -> bool:
