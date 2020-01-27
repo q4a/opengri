@@ -32,8 +32,9 @@ func _init(context#FixCyclicRef: RealContext
 func IsDirectory() -> bool:
 	return true
 
-func GetDirectory(path: String) -> DirectoryEntry:
-	return DirectoryEntry.new(Context, path)
+func GetDirectory(path: String):#FixCyclicRef -> DirectoryEntry:
+#FixCyclicRef	return DirectoryEntry.new(Context, path)
+	return get_script().new(Context, path)
 
 func GetFile(path: String):#FixCyclicRef -> FileEntry:
 	return FileEntry.new(Context, path)

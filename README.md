@@ -7,7 +7,7 @@ Games Resources Importer for Godot.
 
 ## Related Godot bugs
 
-[21461 - The Class X could not be fully loaded (script error or cyclic dependency)](https://github.com/godotengine/godot/issues/21461)
+[21461](https://github.com/godotengine/godot/issues/21461) - The Class X could not be fully loaded (script error or cyclic dependency). Check [#FixCyclicRef](https://github.com/q4a/opengri/search?q=FixCyclicRef&unscoped_q=FixCyclicRef) in this repo.
 
 ## Used code/ideas
 

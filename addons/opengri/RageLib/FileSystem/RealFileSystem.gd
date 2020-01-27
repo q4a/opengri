@@ -21,7 +21,7 @@
 extends FileSystem
 class_name RealFileSystem
 
-var _context#: RealContext
+var _context: RealContext
 
 #TODO: this has to be refactored to be part of Real.FileEntry
 var _customData: Dictionary # of {string: byte[]}

@@ -23,6 +23,10 @@ func _ready():
 	load_config()
 	
 	#begin tests
+#	var test_D = TestClass.new("temp","temp")
+#	var sub_D = test_D.CreateSubDirectory("my_sub")
+#	print("sub_D " + sub_D.Name + " " + sub_D.FullPath)
+	
 	var game_obj = GameSelector.get_item_metadata(1)
 	LoadGameDirectory(game_obj)
 	

@@ -25,6 +25,5 @@ var _directory: String
 var RootDirectory#FixCyclicRef: DirectoryEntry
 
 func _init(directory: String):
-	_directory = directory;
-	#FIXME: !!!
-#FixCyclicRef	RootDirectory = DirectoryEntry.new(self, _directory)
+	_directory = directory
+	RootDirectory = DirectoryEntry.new(self, _directory)
