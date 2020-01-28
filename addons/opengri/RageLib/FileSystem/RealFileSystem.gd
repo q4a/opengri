@@ -24,7 +24,7 @@ class_name RealFileSystem
 var _context: RealContext
 
 #TODO: this has to be refactored to be part of Real.FileEntry
-var _customData: Dictionary # of {string: byte[]}
+var _customData: Dictionary # of {String: PoolByteArray}
 var _realDirectory: String
 
 func Open(filename: String) -> void:
@@ -36,7 +36,7 @@ func Open(filename: String) -> void:
 func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 					, fsDirectory: FSDirectory) -> void:
 	fsDirectory.Name = dirEntry.Name
-	print("dirEntry.Name="+dirEntry.Name)
+#	print("dirEntry.Name="+dirEntry.Name)
 	
 	var dir = Directory.new()
 	dir.open(dirEntry._directory)
@@ -45,51 +45,38 @@ func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 	
 	var path
 	while file_name != "":
-		path = dir.get_current_dir() + "/" + file_name
+		path = dirEntry._directory + "/" + file_name
 		
 		if dir.current_is_dir():
 			var sub_dir = FSDirectory.new()
 			BuildFSDirectory(dirEntry.GetDirectory(path), sub_dir)
-			dir.ParentDirectory = fsDirectory
-			fsDirectory.AddObject(dir)
+			sub_dir.ParentDirectory = fsDirectory
+			fsDirectory.AddObject(sub_dir)
 		else:
 			var fileEntry = dirEntry.GetFile(path)
+			
 			var file = FSFile.new(_customData, fileEntry)
-			print("RealFileSystem._customData.size()="+str(_customData.size())) 
-			print("Found file: " + file_name)
+			
+			file.CompressedSize = fileEntry.Size
+			file.IsCompressed = false
+			file.Name = fileEntry.Name
+			file.Size = fileEntry.Size
+			file.IsResource = fileEntry.IsResourceFile # default: false
+			file.ResourceType = fileEntry.ResourceType # default: null
+			file.ParentDirectory = fsDirectory
+			
+			fsDirectory.AddObject(file)
+			
+#			print("RealFileSystem._customData.size()="+str(_customData.size()))
+#			print("fileEntry.Name="+fileEntry.Name)
+#			print("fileEntry.Size="+str(fileEntry.Size))
+#			print("fileEntry.IsResourceFile="+str(fileEntry.IsResourceFile))
+#			print("fileEntry.ResourceType="+str(fileEntry.ResourceType))
+#			print("fsDirectory="+str(fsDirectory))
 		
 		file_name = dir.get_next()
 		
 	dir.list_dir_end()
-	
-	
-#	for i in range(dirEntry.DirectoryCount):
-#	for (var i = 0; i < dirEntry.DirectoryCount; i++ )
-#		var dir = new Directory();
-#		BuildFSDirectory(dirEntry.GetDirectory(i), dir);
-#		dir.ParentDirectory = fsDirectory;
-#		fsDirectory.AddObject(dir);
-#	
-#	for (var i = 0; i < dirEntry.FileCount; i++ )
-#	{
-#		var fileEntry = dirEntry.GetFile(i);
-#
-#		File file;
-#		file = new File( 
-#						()=> (_customData.ContainsKey(fileEntry.FullName) ? _customData[fileEntry.FullName] : fileEntry.GetData()),     
-#						data => _customData[fileEntry.FullName] = data,
-#						() => _customData.ContainsKey(fileEntry.FullName)
-#					);
-#
-#		file.CompressedSize = fileEntry.Size;
-#		file.IsCompressed = false;
-#		file.Name = fileEntry.Name;
-#		file.Size = fileEntry.Size;
-#		file.IsResource = fileEntry.IsResourceFile;
-#		file.ResourceType = fileEntry.ResourceType;
-#		file.ParentDirectory = fsDirectory;
-#
-#		fsDirectory.AddObject(file)
 
 func BuildFS() -> void:
 	RootDirectory = FSDirectory.new()

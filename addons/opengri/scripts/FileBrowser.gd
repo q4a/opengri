@@ -53,11 +53,11 @@ func _ready():
 	
 	var sub_dir = FSDirectory.new()
 	sub_dir.Name = "sub_dir"
-	sub_dir.ParentDirectory = my;
+	sub_dir.ParentDirectory = my
 	
 	var sub_dir2 = FSDirectory.new()
 	sub_dir2.Name = "sub_dir2"
-	sub_dir2.ParentDirectory = my;
+	sub_dir2.ParentDirectory = my
 	
 	my.AddObject(sub_dir)
 	my.AddObject(sub_dir2)

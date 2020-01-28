@@ -34,12 +34,18 @@ var _resourceFiles = [".wtd", ".wdr", ".wdd", ".wft",
 func _init(context#FixCyclicRef: RealContext
 		, file: String):
 	Context = context
-	_file = file;
+	_file = file
 	Name = _file.get_file()
+	
+	var fs = File.new()
+	fs.open(_file, File.READ)
+	Size = fs.get_len()
 	
 	var ext = "." + Name.get_extension()
 	if _resourceFiles.has(ext):
-		print("#FIXME: Open file stream, fill Size, read resource header and type for ext="+ext)
+		print("#FIXME: Open file stream, read resource header and type for ext="+ext)
+	
+	fs.close()
 
 func IsDirectory() -> bool:
 	return false
@@ -50,7 +56,15 @@ func FullName() -> String:
 #func Size() -> int:
 #	return Size
 
-func GetData():
-	pass
-#	return File.ReadAllBytes(_file.FullName)
+func GetData() -> PoolByteArray:
+	var file = File.new()
+	file.open(_file, File.READ)
+	var content = file.get_buffer(file.get_len())
+	file.close()
+	return content
 
+func SetData(data: PoolByteArray) -> void:
+	var file = File.new()
+	file.open(_file, File.WRITE)
+	file.store_buffer(data)
+	file.close()

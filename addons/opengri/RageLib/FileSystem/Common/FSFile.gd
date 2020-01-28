@@ -24,7 +24,7 @@ class_name FSFile
 const TypeOfResource = preload("res://addons/OpenGRI/RageLib/Common/Resources/ResourceType.gd")
 
 # You don't need Delegates
-# This 2 vars is pointers that allow to use: IsCustomData, GetData, SetData
+# This 2 vars is pointers and its allow to use: IsCustomData, GetData, SetData
 var _customData: Dictionary
 var _fileEntry: FileEntry
 
@@ -46,11 +46,13 @@ var IsResource: bool
 var ResourceType: TypeOfResource
 
 func IsCustomData() -> bool:
-	return _customData.has(_fileEntry.FullName())
+	return _customData.has(_fileEntry._file)
 
-#func GetData() -> Array:
-#	pass
-#	return _customData.has(_fileEntry.FullName())
+func GetData() -> PoolByteArray:
+	if _customData.has(_fileEntry._file):
+		return _customData[_fileEntry._file]
+	else:
+		return _fileEntry.GetData()
 
-
-
+func SetData(data: PoolByteArray) -> void:
+	_customData[_fileEntry._file] = data

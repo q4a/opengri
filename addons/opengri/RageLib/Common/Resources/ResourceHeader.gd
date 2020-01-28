@@ -42,7 +42,7 @@ class ResourceHeader:
 		
 		var maxA: int = 0x3F
 		
-		var sysA: int = systemMemSize >> 8;
+		var sysA: int = systemMemSize >> 8
 		var sysB: int = 0
 		
 		while(sysA > maxA):

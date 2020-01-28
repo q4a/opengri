@@ -35,7 +35,7 @@ func FindByName(name: String):
 	return _fsObjectsByName.get(name.to_lower())
 
 func AddObject(obj) -> void:
-	_fsObjects.append(obj);
+	_fsObjects.append(obj)
 	_fsObjectsByName[obj.Name.to_lower()] = obj
 
 func DeleteObject(obj) -> void:
