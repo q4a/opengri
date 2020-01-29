@@ -30,6 +30,13 @@ func _ready():
 	print("dict1.size()"+str(dict1.size()))
 	print("dict2.size()"+str(dict2.size()))
 	
+#	var my_sp = " 	 "
+#	var my_nsp = " 	f "
+#	if IsNullOrWhiteSpace(my_sp):
+#		print("my_sp="+my_sp+"!")
+#	if !IsNullOrWhiteSpace(my_nsp):
+#		print("my_nsp="+my_nsp+"!")
+	
 #	var test_D = TestClass.new("temp","temp")
 #	var sub_D = test_D.CreateSubDirectory("my_sub")
 #	print("sub_D " + sub_D.Name + " " + sub_D.FullPath)
@@ -287,8 +294,12 @@ func show_OpenFileDialog() -> void:
 	OpenFileDialog.popup()
 	OpenFileDialog.set_position(OS.get_screen_size()/2 - OpenFileDialog.get_size()/2)
 
+
 ########## GTA specific methods ##########
+
 func LoadGameDirectory(game_obj: GameClass) -> void:
+#	print("KeyUtilGTAIV="+KeyUtilGTAIV.ExecutableName)
+	
 	var fs = RealFileSystem.new()
 	print("Load "+game_obj.cfg_key+" with path="+game_obj.path)
 #	string gamePath = keyUtil.FindGameDirectory();
@@ -309,4 +320,5 @@ func LoadGameDirectory(game_obj: GameClass) -> void:
 #	}
 #
 #	KeyStore.SetKeyLoader(() => key);
-	fs.Open(game_obj.path);
+	
+#	fs.Open(game_obj.path);

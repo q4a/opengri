@@ -45,6 +45,11 @@ _global_script_classes=[ {
 "path": "res://addons/OpenGRI/Scripts/GameClass.gd"
 }, {
 "base": "Object",
+"class": "KeyUtil",
+"language": "GDScript",
+"path": "res://addons/OpenGRI/RageLib/Common/KeyUtil.gd"
+}, {
+"base": "Object",
 "class": "RealContext",
 "language": "GDScript",
 "path": "res://addons/OpenGRI/RageLib/FileSystem/Real/RealContext.gd"
@@ -67,6 +72,7 @@ _global_script_class_icons={
 "FileEntry": "",
 "FileSystem": "",
 "GameClass": "",
+"KeyUtil": "",
 "RealContext": "",
 "RealEntry": "",
 "RealFileSystem": ""

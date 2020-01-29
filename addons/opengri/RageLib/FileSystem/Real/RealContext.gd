@@ -24,6 +24,6 @@ class_name RealContext
 var _directory: String
 var RootDirectory#FixCyclicRef: DirectoryEntry
 
-func _init(directory: String):
+func _init(directory: String) -> void:
 	_directory = directory
 	RootDirectory = DirectoryEntry.new(self, _directory)

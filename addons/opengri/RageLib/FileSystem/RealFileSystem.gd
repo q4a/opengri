@@ -33,6 +33,26 @@ func Open(filename: String) -> void:
 	
 	BuildFS()
 
+func Save() -> void:
+	var keys = _customData.keys()
+	for key in keys:
+		var file = File.new()
+		file.open(key, File.WRITE)
+		file.store_buffer(_customData[key])
+		file.close()
+		
+	_customData.clear()
+
+func Rebuild() -> void:
+	push_error("throw new NotImplementedException()")
+	print_stack()
+
+func SupportsRebuild() -> bool:
+	return false
+
+func HasDirectoryStructure() -> bool:
+	return true
+
 func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 					, fsDirectory: FSDirectory) -> void:
 	fsDirectory.Name = dirEntry.Name
