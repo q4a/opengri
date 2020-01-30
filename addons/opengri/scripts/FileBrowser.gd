@@ -14,7 +14,9 @@ onready var FileList = $FileBrowserContainer/SplitContainer/FileContainer/FileLi
 onready var OpenFileDialog = $OpenFileDialog
 
 onready var NewFileDialog = $NewFileDialog
-onready var NewFileDialog_name = $NewFileDialog/NewFileContainer/Filename
+onready var NewFileDialog_Name = $NewFileDialog/NewFileContainer/Filename
+
+var keyUtil
 
 func _ready():
 	update_version()
@@ -126,14 +128,32 @@ func _on_GameSelector_item_selected(id) -> void:
 #	print("_on_GameSelector_item_selected")
 	if id == 0: 
 		clean_editor()
+		return
+	
+	var game_obj = GameSelector.get_item_metadata(id)
+#	print("game_key=" + game_obj.cfg_key)
+	if (game_obj.cfg_key == "GTA_IV" or
+		game_obj.cfg_key == "GTA_IV_EFLC"):
+			keyUtil = KeyUtil.new(game_obj.cfg_key)
+	
+	if game_obj.path != "":
+		_on_OpenFileDialog_dir_selected(game_obj.path)
 	else:
-		var game_obj = GameSelector.get_item_metadata(id)
-		var game_path
-#		print("game_key=" + game_obj.cfg_key)
-		if game_obj.path != "":
-			_on_OpenFileDialog_dir_selected(game_obj.path)
+		var path
+		var title
+		if keyUtil != null:
+			path = keyUtil.FindGameDirectory()
+			title = keyUtil.ExecutableName
 		else:
-			show_OpenFileDialog()
+			print("keyUtil == null")
+			path = ""
+			title = ""
+			
+		if path == "":
+			show_OpenFileDialog(title)
+		else:
+			_on_OpenFileDialog_dir_selected(path)
+	
 
 func _on_OpenFileDialog_dir_selected(dir) -> void:
 #	print("_on_OpenFileDialog_dir_selected")
@@ -146,10 +166,12 @@ func _on_OpenFileDialog_dir_selected(dir) -> void:
 		save_to_config("games", game_obj.cfg_key, dir)
 	
 	GamePath.set_text(game_obj.path)
-	load_tree(game_obj.path, game_obj.title)
-	if (game_obj.cfg_key == "GTA_IV" or
-		game_obj.cfg_key == "GTA_IV_EFLC"):
-			LoadGameDirectory(game_obj)
+	LoadGameDirectory(game_obj)
+	
+#	load_tree(game_obj.path, game_obj.title)
+#	if (game_obj.cfg_key == "GTA_IV" or
+#		game_obj.cfg_key == "GTA_IV_EFLC"):
+#			LoadGameDirectory(game_obj)
 
 func _on_SelectGamePath_pressed() -> void:
 	var id = GameSelector.selected
@@ -166,47 +188,45 @@ func _on_PathTree_cell_selected() -> void:
 		push_error("An error occurred when trying to access the path.")
 
 
-########## PathTree methods ##########
-func load_tree(path: String, title: String) -> void:
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		PathTree.clear()
-		FileList.clear()
-#		load_files(dir)
-		
-		var root = PathTree.create_item()
-		root.set_text(0, title)
-		root.set_metadata(0, path)
-		root.select(0)
-		
-		load_tree_recurs(dir, root)
-	else:
-		push_error("An error occurred when trying to access the path.")
+########## Config file ##########
 
-func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
-	dir.list_dir_begin(true, false)
-	var dir_name = dir.get_next()
-	
-	var path
-	while dir_name != "":
-		path = dir.get_current_dir() + "/" + dir_name
-		
-		if dir.current_is_dir():
-#			print("directory: "+path)
-			var sub_item = PathTree.create_item(tree_item)
-			sub_item.set_text(0, dir_name)
-			sub_item.set_metadata(0, path)
-			
-			var sub_dir = Directory.new()
-			sub_dir.open(path)
-			load_tree_recurs(sub_dir, sub_item)
-		
-		dir_name = dir.get_next()
-	
-	dir.list_dir_end()
+func load_config() -> void:
+	var config = ConfigFile.new()
+	var err = config.load(CONFIG_FILE)
+	if err: # File is missing, create default config
+		config.save(CONFIG_FILE)
+	else:
+		var game_obj
+		for id in range(1, GameSelector.get_item_count()):
+			game_obj = GameSelector.get_item_metadata(id)
+			if config.has_section_key("games", game_obj.cfg_key):
+				game_obj.path = config.get_value("games", game_obj.cfg_key)
+#			print("game_key="+game_obj.cfg_key+" game_path="+game_obj.path)
+
+func save_to_config(section, key, value) -> void:
+	var config = ConfigFile.new()
+	var err = config.load(CONFIG_FILE)
+	if err:
+		print("Error code when loading config file: ", err)
+	else:
+		config.set_value(section, key, value)
+		config.save(CONFIG_FILE)
+
+
+########## Dialogs methods ##########
+
+func show_OpenFileDialog(title = "") -> void:
+#	OpenFileDialog.invalidate()
+	if title == "":
+		OpenFileDialog.window_title = "Select game folder"
+	else:
+		OpenFileDialog.window_title = title
+	OpenFileDialog.popup()
+	OpenFileDialog.set_position(OS.get_screen_size()/2 - OpenFileDialog.get_size()/2)
 
 
 ########## FileList methods ##########
+
 func load_files(dir: Directory) -> void:
 	FileList.clear()
 	var tree_root = FileList.create_item()
@@ -262,43 +282,50 @@ func load_files(dir: Directory) -> void:
 		file_name = dir.get_next()
 	dir.list_dir_end()
 
-########## Config file ##########
 
-func load_config() -> void:
-	var config = ConfigFile.new()
-	var err = config.load(CONFIG_FILE)
-	if err: # File is missing, create default config
-		config.save(CONFIG_FILE)
+########## PathTree methods ##########
+
+func load_tree(path: String, title: String) -> void:
+	var dir = Directory.new()
+	if dir.open(path) == OK:
+		PathTree.clear()
+		FileList.clear()
+#		load_files(dir)
+		
+		var root = PathTree.create_item()
+		root.set_text(0, title)
+		root.set_metadata(0, path)
+		root.select(0)
+		
+		load_tree_recurs(dir, root)
 	else:
-		var game_obj
-		for id in range(1, GameSelector.get_item_count()):
-			game_obj = GameSelector.get_item_metadata(id)
-			if config.has_section_key("games", game_obj.cfg_key):
-				game_obj.path = config.get_value("games", game_obj.cfg_key)
-#			print("game_key="+game_obj.cfg_key+" game_path="+game_obj.path)
+		push_error("An error occurred when trying to access the path.")
 
-func save_to_config(section, key, value) -> void:
-	var config = ConfigFile.new()
-	var err = config.load(CONFIG_FILE)
-	if err:
-		print("Error code when loading config file: ", err)
-	else:
-		config.set_value(section, key, value)
-		config.save(CONFIG_FILE)
-
-
-########## Dialogs methods ##########
-
-func show_OpenFileDialog() -> void:
-#	OpenFileDialog.invalidate()
-	OpenFileDialog.popup()
-	OpenFileDialog.set_position(OS.get_screen_size()/2 - OpenFileDialog.get_size()/2)
-
-
-########## GTA specific methods ##########
+func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
+	dir.list_dir_begin(true, false)
+	var dir_name = dir.get_next()
+	
+	var path
+	while dir_name != "":
+		path = dir.get_current_dir() + "/" + dir_name
+		
+		if dir.current_is_dir():
+#			print("directory: "+path)
+			var sub_item = PathTree.create_item(tree_item)
+			sub_item.set_text(0, dir_name)
+			sub_item.set_metadata(0, path)
+			
+			var sub_dir = Directory.new()
+			sub_dir.open(path)
+			load_tree_recurs(sub_dir, sub_item)
+		
+		dir_name = dir.get_next()
+	
+	dir.list_dir_end()
 
 func LoadGameDirectory(game_obj: GameClass) -> void:
 #	print("KeyUtilGTAIV="+KeyUtilGTAIV.ExecutableName)
+	load_tree(game_obj.path, game_obj.title) # TODO replace with fs
 	
 	var fs = RealFileSystem.new()
 	print("Load "+game_obj.cfg_key+" with path="+game_obj.path)
