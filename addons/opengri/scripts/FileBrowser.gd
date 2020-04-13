@@ -325,7 +325,7 @@ func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
 
 func LoadGameDirectory(game_obj: GameClass) -> void:
 #	print("KeyUtilGTAIV="+KeyUtilGTAIV.ExecutableName)
-	load_tree(game_obj.path, game_obj.title) # TODO replace with fs
+	load_tree(game_obj.path, game_obj.title) #TODO replace with fs
 	
 	var fs = RealFileSystem.new()
 	print("Load "+game_obj.cfg_key+" with path="+game_obj.path)

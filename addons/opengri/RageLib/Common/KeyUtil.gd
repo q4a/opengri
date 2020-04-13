@@ -74,4 +74,36 @@ func _init(cfg_key: String) -> void:
 		]
 
 func FindGameDirectory() -> String:
+	#TODO: add search game folder in Registry. Windows only
+	
+#	var keys = PathRegistryKeys;
+#	foreach (var s in keys)
+#	{
+#		RegistryKey key;
+#		if ((key = Registry.LocalMachine.OpenSubKey(s)) != null)
+#		{
+#			if (File.Exists(Path.Combine(key.GetValue("InstallFolder").ToString(), ExecutableName)))
+#			{
+#				dir = key.GetValue("InstallFolder").ToString();
+#				key.Close();
+#				break;
+#			}
+#			else
+#			{
+#				var fbd = new VistaFolderBrowserDialog();
+#				fbd.Description = "Select game folder";
+#				//DialogResult result = fbd.ShowDialog();
+#				if (fbd.ShowDialog() == DialogResult.OK && !StringExtensions.IsNullOrWhiteSpace(fbd.SelectedPath))
+#				{
+#					dir = fbd.SelectedPath;
+#					break;
+#				}
+#				else
+#				{
+#					MessageBox.Show("Please select game folder.");
+#					Application.Exit();
+#				}
+#			}
+#		}
+#	}
 	return ""
