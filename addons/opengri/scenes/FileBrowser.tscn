@@ -32,10 +32,8 @@ margin_bottom = 24.0
 margin_right = 135.0
 margin_bottom = 24.0
 text = "-- Select game --"
-items = [ "-- Select game --", null, false, 0, null, "GTA IV", null, false, 1, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/OpenGRI/Scripts/GameClass.gd" ),"title":"GTA IV","cfg_key":"GTA_IV","path":"C:/game/Grand Theft Auto IV/GTAIV")
-, "GTA IV: EFLC", null, false, 2, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/OpenGRI/Scripts/GameClass.gd" ),"title":"GTA IV: EFLC","cfg_key":"GTA_IV_EFLC","path":"C:/game/Grand Theft Auto IV/EFLC")
-, "Custom folder", null, false, 3, Object(Node,"_import_path":NodePath(""),"pause_mode":0,"process_priority":0,"script":Resource( "res://addons/OpenGRI/Scripts/GameClass.gd" ),"title":"Custom folder","cfg_key":"Custom","path":"C:/git/opengri/test")
- ]
+items = [ "-- Select game --", null, false, 0, null, "Might&Magic 6-8", null, false, 1, Object(Object,"script":Resource( "res://addons/OpenGRI/Scripts/GameClass.gd" ),"title":"Might&Magic 6-8","cfg_key":"MM_ARCH","path":"C:/git/lod/womm-godot")
+, "Custom folder", null, false, 4, null ]
 selected = 0
 
 [node name="SelectGamePath" type="Button" parent="FileBrowserContainer/GameSelectorContainer"]

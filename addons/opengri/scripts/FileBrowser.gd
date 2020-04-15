@@ -16,6 +16,7 @@ onready var OpenFileDialog = $OpenFileDialog
 onready var NewFileDialog = $NewFileDialog
 onready var NewFileDialog_Name = $NewFileDialog/NewFileContainer/Filename
 
+var commonResLib
 var keyUtil
 
 func _ready():
@@ -23,6 +24,7 @@ func _ready():
 	fill_GameSelector()
 	setup_FileList()
 	load_config()
+	commonResLib = CommonResLib.new()
 	
 	#begin tests
 	var dict1: Dictionary
@@ -101,9 +103,10 @@ func fill_GameSelector() -> void:
 	var g = GameClass.new({title = "-- Select game --"})
 	GameSelector.add_item(g.title, 0)
 	
-	add_item_GameSelector(1, {title = "GTA IV", cfg_key = "GTA_IV"})
-	add_item_GameSelector(2, {title = "GTA IV: EFLC", cfg_key = "GTA_IV_EFLC"})
-	add_item_GameSelector(3, {title = "Custom folder", cfg_key = "Custom"})
+	add_item_GameSelector(1, {title = "Might&Magic 6-8", cfg_key = "MM_ARCH"})
+#	add_item_GameSelector(2, {title = "GTA IV", cfg_key = "GTA_IV"})
+#	add_item_GameSelector(3, {title = "GTA IV: EFLC", cfg_key = "GTA_IV_EFLC"})
+	add_item_GameSelector(2, {title = "Custom folder", cfg_key = "Custom"})
 
 func setup_FileList() -> void:
 	FileList.set_column_title(0, "Name")
@@ -167,11 +170,6 @@ func _on_OpenFileDialog_dir_selected(dir) -> void:
 	
 	GamePath.set_text(game_obj.path)
 	LoadGameDirectory(game_obj)
-	
-#	load_tree(game_obj.path, game_obj.title)
-#	if (game_obj.cfg_key == "GTA_IV" or
-#		game_obj.cfg_key == "GTA_IV_EFLC"):
-#			LoadGameDirectory(game_obj)
 
 func _on_SelectGamePath_pressed() -> void:
 	var id = GameSelector.selected
@@ -180,12 +178,15 @@ func _on_SelectGamePath_pressed() -> void:
 
 func _on_PathTree_cell_selected() -> void:
 #	print("_on_PathTree_cell_selected")
-	var path = PathTree.get_selected().get_metadata(0)
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		load_files(dir)
-	else:
-		push_error("An error occurred when trying to access the path.")
+	#var path = PathTree.get_selected().get_metadata(0)
+	#var dir = Directory.new()
+	#if dir.open(path) == OK:
+	#	load_files(dir)
+	#else:
+	#	push_error("An error occurred when trying to access the path.")
+	load_files(PathTree.get_selected().get_metadata(0))
+	#var fsDirectory = PathTree.get_selected().get_metadata(0)
+	#print("_fsObjects.size = "+str(fsDirectory._fsObjects.size()))
 
 
 ########## Config file ##########
@@ -227,107 +228,127 @@ func show_OpenFileDialog(title = "") -> void:
 
 ########## FileList methods ##########
 
-func load_files(dir: Directory) -> void:
+func load_files(fsDirectory: FSDirectory) -> void:
 	FileList.clear()
 	var tree_root = FileList.create_item()
 	
-	dir.list_dir_begin(true, false)
-	var file_name = dir.get_next()
-
-	while (file_name != ""):
-		var path = dir.get_current_dir() + "/" + file_name
-		
-		if !dir.current_is_dir():
-			var file = File.new()
-			file.open(path, File.READ)
-			var size = file.get_len()
-			file.close()
-			
-#			print("file: "+file_name+" size: "+str(size))
-			var size_short = float(size)
-			var dimension = 0
-			while (size_short > 1024):
-				dimension = dimension + 1
-				size_short = size_short / 1024
-			
-			size_short = str(size_short).left(4)
-#			var length = size_short.length()
-#			while (length != 4):
-#				length = length + 1
-#				size_short = " "+size_short
-			
-			if size_short.right(3) == ".":
-				size_short = size_short.left(3)
-			if dimension == 0:
-				dimension = " B"
-			elif dimension == 1:
-				dimension = " KB"
-			elif dimension == 2:
-				dimension = " MB"
-			elif dimension == 3:
-				dimension = " GB"
-			elif dimension == 4:
-				dimension = " TB"
-			elif dimension > 4:
-				dimension = " *B"
-			size_short = size_short + dimension
-			
+	for fsObject in fsDirectory:
+		if not fsObject.IsDirectory():
 			var item = FileList.create_item(tree_root)
-			item.set_text(0, file_name)
+			item.set_text(0, fsObject.Name)
 			item.set_icon(0, IconLoader.load("file"))
-			item.set_metadata(0, path)
-			item.set_text(1, size_short)
-			item.set_metadata(1, size)
+			item.set_metadata(0, fsObject)
+			item.set_text(1, fsObject.SizeS)
+			item.set_metadata(1, fsObject.Size)
+#			#item.set_text(2, commonResLib.IsResource())
 			item.set_text(2, "Yes (to test)")
-		file_name = dir.get_next()
-	dir.list_dir_end()
+
+
+#func load_files(dir: Directory) -> void:
+#	FileList.clear()
+#	var tree_root = FileList.create_item()
+#	
+#	dir.list_dir_begin(true, false)
+#	var file_name = dir.get_next()
+#
+#	while (file_name != ""):
+#		var path = dir.get_current_dir() + "/" + file_name
+#		
+#		if !dir.current_is_dir():
+#			var file = File.new()
+#			file.open(path, File.READ)
+#			var size = file.get_len()
+#			file.close()
+#			
+##			print("file: "+file_name+" size: "+str(size))
+#			var size_short = float(size)
+#			var dimension = 0
+#			while (size_short > 1024):
+#				dimension = dimension + 1
+#				size_short = size_short / 1024
+#			
+#			size_short = str(size_short).left(4)
+##			var length = size_short.length()
+##			while (length != 4):
+##				length = length + 1
+##				size_short = " "+size_short
+#			
+#			if size_short.right(3) == ".":
+#				size_short = size_short.left(3)
+#			if dimension == 0:
+#				dimension = " B"
+#			elif dimension == 1:
+#				dimension = " KB"
+#			elif dimension == 2:
+#				dimension = " MB"
+#			elif dimension == 3:
+#				dimension = " GB"
+#			elif dimension == 4:
+#				dimension = " TB"
+#			elif dimension > 4:
+#				dimension = " *B"
+#			size_short = size_short + dimension
+#			
+#			var item = FileList.create_item(tree_root)
+#			item.set_text(0, file_name)
+#			item.set_icon(0, IconLoader.load("file"))
+#			item.set_metadata(0, path)
+#			item.set_text(1, size_short)
+#			item.set_metadata(1, size)
+#			#item.set_text(2, commonResLib.IsResource())
+#			item.set_text(2, "Yes (to test)")
+#		file_name = dir.get_next()
+#	dir.list_dir_end()
 
 
 ########## PathTree methods ##########
 
-func load_tree(path: String, title: String) -> void:
-	var dir = Directory.new()
-	if dir.open(path) == OK:
-		PathTree.clear()
-		FileList.clear()
-#		load_files(dir)
-		
-		var root = PathTree.create_item()
-		root.set_text(0, title)
-		root.set_metadata(0, path)
-		root.select(0)
-		
-		load_tree_recurs(dir, root)
-	else:
-		push_error("An error occurred when trying to access the path.")
+#func load_tree(path: String, title: String) -> void:
+#	var dir = Directory.new()
+#	if dir.open(path) == OK:
+#		PathTree.clear()
+#		FileList.clear()
+##		load_files(dir)
+#		
+#		var root = PathTree.create_item()
+#		root.set_text(0, title)
+#		root.set_metadata(0, path)
+#		root.select(0)
+#		
+#		load_tree_recurs(dir, root)
+#	else:
+#		push_error("An error occurred when trying to access the path.")
 
-func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
-	dir.list_dir_begin(true, false)
-	var dir_name = dir.get_next()
-	
-	var path
-	while dir_name != "":
-		path = dir.get_current_dir() + "/" + dir_name
-		
-		if dir.current_is_dir():
-#			print("directory: "+path)
-			var sub_item = PathTree.create_item(tree_item)
-			sub_item.set_text(0, dir_name)
-			sub_item.set_metadata(0, path)
-			
-			var sub_dir = Directory.new()
-			sub_dir.open(path)
-			load_tree_recurs(sub_dir, sub_item)
-		
-		dir_name = dir.get_next()
-	
-	dir.list_dir_end()
+#func load_tree_recurs(dir: Directory, tree_item: TreeItem) -> void:
+#	dir.list_dir_begin(true, false)
+#	var dir_name = dir.get_next()
+#	
+#	var path
+#	while dir_name != "":
+#		path = dir.get_current_dir() + "/" + dir_name
+#		
+#		if dir.current_is_dir():
+##			print("directory: "+path)
+#			var sub_item = PathTree.create_item(tree_item)
+#			sub_item.set_text(0, dir_name)
+#			sub_item.set_metadata(0, path)
+#			
+#			var sub_dir = Directory.new()
+#			sub_dir.open(path)
+#			load_tree_recurs(sub_dir, sub_item)
+#		
+#		dir_name = dir.get_next()
+#	
+#	dir.list_dir_end()
 
 func LoadGameDirectory(game_obj: GameClass) -> void:
 #	print("KeyUtilGTAIV="+KeyUtilGTAIV.ExecutableName)
-	load_tree(game_obj.path, game_obj.title) #TODO replace with fs
+#	load_tree(game_obj.path, game_obj.title) #TODO replace with fs
 	
 	var fs = RealFileSystem.new()
+	fs.game_obj = game_obj
+	fs.PathTree = PathTree
+	fs.FileList = FileList
 	print("Load "+game_obj.cfg_key+" with path="+game_obj.path)
 #	string gamePath = keyUtil.FindGameDirectory();
 	
@@ -348,4 +369,4 @@ func LoadGameDirectory(game_obj: GameClass) -> void:
 #
 #	KeyStore.SetKeyLoader(() => key);
 	
-#	fs.Open(game_obj.path);
+	fs.Open();

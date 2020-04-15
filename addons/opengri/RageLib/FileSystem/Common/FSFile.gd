@@ -41,6 +41,7 @@ var IsCompressed: bool
 var CompressedSize: int
 
 var Size: int
+var SizeS: String
 
 var IsResource: bool
 var ResourceType: TypeOfResource

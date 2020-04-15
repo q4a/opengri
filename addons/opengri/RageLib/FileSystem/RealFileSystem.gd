@@ -21,15 +21,21 @@
 extends FileSystem
 class_name RealFileSystem
 
+var game_obj: GameClass
+var PathTree: Tree
+var FileList: Tree
+#onready var PathTree = $FileBrowserContainer/SplitContainer/TreeContainer/PathTree
+#onready var FileList = $FileBrowserContainer/SplitContainer/FileContainer/FileList
+
 var _context: RealContext
 
 #TODO: this has to be refactored to be part of Real.FileEntry
 var _customData: Dictionary # of {String: PoolByteArray}
 var _realDirectory: String
 
-func Open(filename: String) -> void:
-	_realDirectory = filename
-	_context = RealContext.new(filename)
+func Open() -> void:
+	_realDirectory = game_obj.path
+	_context = RealContext.new(game_obj.path)
 	
 	BuildFS()
 
@@ -54,7 +60,7 @@ func HasDirectoryStructure() -> bool:
 	return true
 
 func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
-					, fsDirectory: FSDirectory) -> void:
+		, fsDirectory: FSDirectory, tree_item: TreeItem) -> void:
 	fsDirectory.Name = dirEntry.Name
 #	print("dirEntry.Name="+dirEntry.Name)
 	
@@ -69,7 +75,12 @@ func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 		
 		if dir.current_is_dir():
 			var sub_dir = FSDirectory.new()
-			BuildFSDirectory(dirEntry.GetDirectory(path), sub_dir)
+			
+			var sub_item = PathTree.create_item(tree_item)
+			sub_item.set_text(0, file_name)
+			sub_item.set_metadata(0, sub_dir)
+			
+			BuildFSDirectory(dirEntry.GetDirectory(path), sub_dir, sub_item)
 			sub_dir.ParentDirectory = fsDirectory
 			fsDirectory.AddObject(sub_dir)
 		else:
@@ -81,6 +92,7 @@ func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 			file.IsCompressed = false
 			file.Name = fileEntry.Name
 			file.Size = fileEntry.Size
+			file.SizeS = fileEntry.SizeS
 			file.IsResource = fileEntry.IsResourceFile # default: false
 			file.ResourceType = fileEntry.ResourceType # default: null
 			file.ParentDirectory = fsDirectory
@@ -99,5 +111,14 @@ func BuildFSDirectory(dirEntry#FixCyclicRef: DirectoryEntry
 	dir.list_dir_end()
 
 func BuildFS() -> void:
+	PathTree.clear()
+	FileList.clear()
+	
 	RootDirectory = FSDirectory.new()
-	BuildFSDirectory(_context.RootDirectory, RootDirectory)
+	
+	var root = PathTree.create_item()
+	root.set_text(0, game_obj.title)
+	root.set_metadata(0, RootDirectory)
+	root.select(0)
+	
+	BuildFSDirectory(_context.RootDirectory, RootDirectory, root)
